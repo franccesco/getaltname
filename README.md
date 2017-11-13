@@ -1,5 +1,5 @@
 # GetAltNames
-Get Subject Alt Names for SSL Certificates which can provide you with URI's, Emails, DNS names and IP Addresses.
+Get Subject Alt Names for SSL Certificates which can provide you with DNS names or virtual servers.
 
 It's useful in a discovery phase of a pentesting assesment, just a little tool to provide you with more information about your target and scope.
 
@@ -7,7 +7,7 @@ This is alpha, it doesn't do as much as it should. lots of things and features a
 
 # Usage:
 ```
-Usage:  getaltname.rb [OPTIONS]
+Usage:  getaltname.rb -h HOST [-p port]
 
 Specific Options:
     -h, --host host                  Host to extract alternative names.
@@ -20,23 +20,34 @@ Common Options:
 In this case the tool give you subdomains that you probably didn't find with a subdomain brute force.
 
 ```
-λ linuxbox getaltname → λ git release/0.1.0* → ./getaltname.rb -h examplewebsite.com
-100 Subject Alternative Names found:
-
-adquisiciones.examplewebsite.com
-bib.examplewebsite.com
-ccpe.examplewebsite.com
-cedocfec.examplewebsite.com
-compufec.examplewebsite.com
-control-co.examplewebsite.com
-dbe.examplewebsite.com
-dde-e.examplewebsite.com
-dde.examplewebsite.com
-di.examplewebsite.com
-diex.examplewebsite.com
-docentes.examplewebsite.com
-dtic.examplewebsite.com
-extension.examplewebsite.com
-fcys.examplewebsite.com
+/getaltname.rb -h microsoft.com
+140 Subject Alternative Names found:
+==================================
+msdn.com
+xbox.com
+*.live.com
+*.msdn.com
+gigjam.com
+windows.nl
+winhec.com
+winhec.net
+*.azure.biz
+*.azure.net
+*.getie.com
+*.msdn2.com
+*.netfx.com
+*.vssdk.com
+surface.com
+windows.com
+*.gigjam.com
+*.msdntv.com
+*.windows.nl
+*.winhec.com
+*.winhec.net
 --- SNIP ---
 ```
+
+# TO-DO
+[ ] File output
+[ ] Input to scan
+[ ] Remove duplicates
