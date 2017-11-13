@@ -87,8 +87,13 @@ san = cert.extensions.find { |value| value.oid == 'subjectAltName' }
 
 # format values and display them in a list so we can use them in other tools
 # and for copy&paste supah-powah... output is on the way.
-san = san.value.split(', ')
-puts "#{san.length} Subject Alternative Names found:\n\n"
-
-# cut 'DNS:' from every entry, bad implement but it works right now
-san.each { |value| puts value[4..-1] }
+begin
+  san = san.value.split(', ')
+rescue StandardError
+  puts 'No Alternative Names found.'
+else
+  # cut 'DNS:' from every entry, bad implement but it works right now
+  puts "#{san.length} Subject Alternative Names found:"
+  puts '=================================='
+  san.each { |value| puts value[4..-1] }
+end
