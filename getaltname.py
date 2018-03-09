@@ -41,6 +41,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('hostname', type=str, help='Host to analize.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
+parser.add_argument('-o', '--output', type=str,
+                    help='Set output filename', nargs=1)
 args = parser.parse_args()
 
 
@@ -68,6 +70,7 @@ def get_san(hostname, port):
             ext_data = ext.get_data()
             decoded_dat = decoder.decode(ext_data, asn1Spec=general_names)
 
+            # decoding SANS with magic sauce, please explain this to me.
             for name in decoded_dat:
                 if isinstance(name, SubjectAltName):
                     for entry in range(len(name)):
@@ -77,7 +80,16 @@ def get_san(hostname, port):
     return subdomains
 
 
+def output(subdomains, destination):
+    """Writes the subdomain list to a destination."""
+    with open(destination, 'w') as file_object:
+        for line in subdomains:
+            file_object.write('{}\n'.format(line))
+
+
 # print each subdomain found
 sans = get_san(args.hostname, args.port)
 for subject in sans:
     print(subject)
+if args.output:
+    output(sans, args.output)

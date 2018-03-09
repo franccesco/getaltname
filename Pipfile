@@ -10,7 +10,7 @@ name = "pypi"
 requests = "*"
 colorama = "*"
 cryptography = "*"
-pyOpenSSL = "*"
+pyopenssl = "*"
 "pyasn1" = "*"
 ndg-httpsclient = "*"
 
