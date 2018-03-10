@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fa08dcbe4f8a458944afbb90191ff43e232def480b286d6be60a30b32dc62a10"
+            "sha256": "dc8d1276080f93c23edb22d57a388e5015509f188b4974d354c80b612256e964"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -162,6 +162,12 @@
                 "sha256:2c10cfba46a52c0b0950118981d61e72c1e5b1aac451ca1bc77de1a679456773"
             ],
             "version": "==17.5.0"
+        },
+        "pyperclip": {
+            "hashes": [
+                "sha256:ce829433a9af640e08ee89b20f7c62132714bcc5d77df114044d0fccb8c3b3b8"
+            ],
+            "version": "==1.6.0"
         },
         "requests": {
             "hashes": [
