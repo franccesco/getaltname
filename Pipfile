@@ -13,6 +13,7 @@ cryptography = "*"
 pyopenssl = "*"
 "pyasn1" = "*"
 ndg-httpsclient = "*"
+pyperclip = "*"
 
 
 [dev-packages]
