@@ -48,7 +48,7 @@ parser.add_argument('-p', '--port', type=int,
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
 parser.add_argument('-c', '--clipboard',
-                    help='Copy the output to the clipboardin as a List \
+                    help='Copy the output to the clipboard as a List \
                     or a Single string', choices=['l', 's'])
 parser.add_argument('-d', '--debug',
                     help='Set debug enable', action='store_true')
