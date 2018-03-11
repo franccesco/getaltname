@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.1.0
-# This program extracts Subject Alternative Names from SSL Certificates
-# which it can disclose virtual names the server has... so stop doing so many
-# dns brute force for the love of god.
+# Version: 0.2.0
+# This program extracts Subject Alternative Names from SSL Certificates.
+# It can disclose virtual names (subdomains) that the server has... so stop
+# doing so many dns brute force for the love of god.
 #
-# Usage: getaltname.py -h [host] -p [ssl_port]
+# Usage: getaltname.py -p [ssl_port] [host]
 #
 # MIT License
 #
-# Copyright (c) [2017] [Franccesco Orozco]
+# Copyright (c) [2018] [Franccesco Orozco]
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -104,8 +104,14 @@ def output(subdomains, destination):
             file_object.write('{}\n'.format(line))
 
 
-# print each subdomain found
 sans = get_san(args.hostname, args.port, args.debug)
+
+# print discovery report and a separator ('=') as long as the message
+message = "{} SAN's found from {}".format(len(sans), args.hostname)
+print(message)
+print('=' * len(message))
+
+# print each subdomain found
 for subject in sans:
     print(subject)
 
