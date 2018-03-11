@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.3.0
+# Version: 0.4.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -108,7 +108,7 @@ def get_san(hostname, port, debug=False):
     try:
         cert = ssl.get_server_certificate((args.hostname, args.port))
     except Exception as e:
-        err = colored('Could not connect to server.', 'white', 'on_red')
+        err = colored('FATAL: Could not connect to server.', 'white', 'on_red')
         print(err, end='\n')
         if debug:
             raise e
