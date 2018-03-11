@@ -16,28 +16,27 @@ You can read more about how to do this _manually_ from my blog post on [getroot.
 - [x] Strip subdomain **wildcards**.
 - [x] Removes duplication for **www** subdomains (e.g. example.com and www.example.com)
 - [x] Copy the **output directly to clipboard** as a single line string or as a list
+- [x] A filter system for main domain and TLD's.
 
 ## What's to be added in a near future?
-- [ ] A filter system for main domain and TLD's.
 - [ ] Get additional sub-domains from crt.sh
 - [ ] [Ideas/suggestions are very welcome.](https://github.com/franccesco/getaltname/issues)
 
 # Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-o OUTPUT] [-c {l,s}] [-d] hostname
+usage: getaltname.py [-h] [-p PORT] [-m] [-o OUTPUT] [-c {l,s}] [-d] hostname
 
 positional arguments:
-  hostname              Host to analyze.
+  hostname                     Host to analyze.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -p PORT, --port PORT  Destiny port (default 443)
-  -o OUTPUT, --output OUTPUT
-                        Set output filename
-  -c {l,s}, --clipboard {l,s}
-                        Copy the output to the clipboard as a List or a
-                        Single string
-  -d, --debug           Set debug enable
+  -h, --help                   show this help message and exit
+  -p PORT, --port PORT         Destiny port (default 443)
+  -m, --matching-domain        Show matching domain name only
+  -o OUTPUT, --output OUTPUT   Set output filename
+  -c {l,s}, --clipboard {l,s}  Copy the output to the clipboard as a List or a
+                               Single string
+  -d, --debug                  Set debug enable
 ```
 
 You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
