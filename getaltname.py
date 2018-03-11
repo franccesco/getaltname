@@ -29,6 +29,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import re
 import ssl
 import OpenSSL
 import argparse
@@ -41,10 +42,14 @@ from pyasn1.codec.der import decoder
 colorama.init()
 
 # CLI argumentation
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(
+    formatter_class=lambda
+    prog: argparse.HelpFormatter(prog, max_help_position=100))
 parser.add_argument('hostname', type=str, help='Host to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
+parser.add_argument('-m', '--matching-domain',
+                    help='Set matching domain only', action='store_true')
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
 parser.add_argument('-c', '--clipboard',
@@ -55,14 +60,37 @@ parser.add_argument('-d', '--debug',
 args = parser.parse_args()
 
 
-def clean_san_list(subdomain_list):
+def match_domain_only(subdomain_list):
+    """Returns a list with the specified domain only."""
+    match_list = []
+    matching_domain = args.hostname
+
+    for domain in subdomain_list:
+        pattern = '.*\.{}$'.format(matching_domain)
+        matched_domain = re.search(pattern, domain)
+        if matched_domain is None:
+            continue
+        subdomain_found = matched_domain.group(0)
+        match_list.append(subdomain_found)
+    return set(match_list)
+
+
+def clean_san_list(subdomain_list, domain_only=False):
     """Clean wildcards such as '*.' and returns a unique set."""
     for domain in subdomain_list:
         item_index = subdomain_list.index(domain)
+
+        # strip wildcards and unnecesary 'www'
         if '*.' in domain:
             subdomain_list[item_index] = domain[2:]
         elif 'www.' in domain:
             subdomain_list[item_index] = domain[4:]
+
+    # if '-m' flag is True, then match domains only
+    if domain_only:
+        match_list = match_domain_only(subdomain_list)
+        return match_list
+
     return set(subdomain_list)
 
 
@@ -106,7 +134,7 @@ def get_san(hostname, port, debug=False):
                         subdomains.append(str(component.getComponent()))
 
     # return a unique set of subdomains without wildcards
-    filtered_domains = clean_san_list(subdomains)
+    filtered_domains = clean_san_list(subdomains, args.matching_domain)
     return filtered_domains
 
 
