@@ -55,6 +55,17 @@ parser.add_argument('-d', '--debug',
 args = parser.parse_args()
 
 
+def clean_san_list(subdomain_list):
+    """Clean wildcards such as '*.' and returns a unique set."""
+    for domain in subdomain_list:
+        item_index = subdomain_list.index(domain)
+        if '*.' in domain:
+            subdomain_list[item_index] = domain[2:]
+        elif 'www.' in domain:
+            subdomain_list[item_index] = domain[4:]
+    return set(subdomain_list)
+
+
 def get_san(hostname, port, debug=False):
     """Gets Subject Alternative Names from requested host.
     Thanks to Cato- for this piece of code:
@@ -94,7 +105,9 @@ def get_san(hostname, port, debug=False):
                         component = name.getComponentByPosition(entry)
                         subdomains.append(str(component.getComponent()))
 
-    return subdomains
+    # return a unique set of subdomains without wildcards
+    filtered_domains = clean_san_list(subdomains)
+    return filtered_domains
 
 
 def output(subdomains, destination):
