@@ -42,7 +42,7 @@ colorama.init()
 
 # CLI argumentation
 parser = argparse.ArgumentParser()
-parser.add_argument('hostname', type=str, help='Host to analize.')
+parser.add_argument('hostname', type=str, help='Host to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
 parser.add_argument('-o', '--output', type=str,

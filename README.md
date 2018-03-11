@@ -12,7 +12,7 @@ You can read more about how this tool works from my post in [getroot.info](https
 usage: getaltname.py [-h] [-p PORT] [-o OUTPUT] [-c {l,s}] [-d] hostname
 
 positional arguments:
-  hostname              Host to analize.
+  hostname              Host to analyze.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -31,7 +31,7 @@ You can output to a text file and **also copy the output to you clipboard** as a
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
 
 ```sh
-python getaltname.py microsoft.com
+$ python getaltname.py microsoft.com
 118 SAN's found from microsoft.com
 ==================================
 biztalk.org
