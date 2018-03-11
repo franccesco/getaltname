@@ -3,8 +3,7 @@
 # Version: 0.1.0
 # This program extracts Subject Alternative Names from SSL Certificates
 # which it can disclose virtual names the server has... so stop doing so many
-# dns brute force for the love of god. This can also provide you with email
-# addresses, URI's and IP addresses.
+# dns brute force for the love of god.
 #
 # Usage: getaltname.py -h [host] -p [ssl_port]
 #
@@ -33,9 +32,13 @@
 import ssl
 import OpenSSL
 import argparse
+import colorama
 import pyperclip
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 from pyasn1.codec.der import decoder
+
+# starting Colorama
+colorama.init()
 
 # CLI argumentation
 parser = argparse.ArgumentParser()
@@ -47,10 +50,12 @@ parser.add_argument('-o', '--output', type=str,
 parser.add_argument('-c', '--clipboard',
                     help='Copy the output to the clipboardin as a List \
                     or a Single string', choices=['l', 's'])
+parser.add_argument('-d', '--debug',
+                    help='Set debug enable', action='store_true')
 args = parser.parse_args()
 
 
-def get_san(hostname, port):
+def get_san(hostname, port, debug=False):
     """Gets Subject Alternative Names from requested host.
     Thanks to Cato- for this piece of code:
     https://gist.github.com/cato-/6551668"""
@@ -58,8 +63,16 @@ def get_san(hostname, port):
     subdomains = []
     general_names = SubjectAltName()
 
+    # Tries to connect to server, exits on error unless Traceback is requested
+    try:
+        cert = ssl.get_server_certificate((args.hostname, args.port))
+    except Exception as e:
+        print('FATAL: Could not connect to server.')
+        if debug:
+            raise e
+        exit()
+
     # requesting certificate
-    cert = ssl.get_server_certificate((args.hostname, args.port))
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
 
     # get all extensions from certificate and iterate until we find a SAN entry
@@ -92,7 +105,7 @@ def output(subdomains, destination):
 
 
 # print each subdomain found
-sans = get_san(args.hostname, args.port)
+sans = get_san(args.hostname, args.port, args.debug)
 for subject in sans:
     print(subject)
 
