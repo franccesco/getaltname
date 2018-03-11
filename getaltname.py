@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.2.2
+# Version: 0.3.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -50,7 +50,7 @@ parser.add_argument('hostname', type=str, help='Host to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
 parser.add_argument('-m', '--matching-domain',
-                    help='Set matching domain only', action='store_true')
+                    help='Show matching domain name only', action='store_true')
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
 parser.add_argument('-c', '--clipboard',
