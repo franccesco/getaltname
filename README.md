@@ -9,20 +9,19 @@ You can read more about how this tool works from my post in [getroot.info](https
 
 # Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-o OUTPUT] [-c {l,s}] [-d] hostname
+usage: getaltname.py [-h] [-p PORT] [-m] [-o OUTPUT] [-c {l,s}] [-d] hostname
 
 positional arguments:
-  hostname              Host to analyze.
+  hostname                     Host to analyze.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -p PORT, --port PORT  Destiny port (default 443)
-  -o OUTPUT, --output OUTPUT
-                        Set output filename
-  -c {l,s}, --clipboard {l,s}
-                        Copy the output to the clipboard as a List or a
-                        Single string
-  -d, --debug           Set debug enable
+  -h, --help                   show this help message and exit
+  -p PORT, --port PORT         Destiny port (default 443)
+  -m, --matching-domain        Show matching domain name only
+  -o OUTPUT, --output OUTPUT   Set output filename
+  -c {l,s}, --clipboard {l,s}  Copy the output to the clipboard as a List or a
+                               Single string
+  -d, --debug                  Set debug enable
 ```
 
 You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
@@ -92,6 +91,6 @@ $ apt install xclip
 - [x] Output to clipboard
 - [x] Clean sub-domains wildcards
 - [x] Remove duplicates
+- [x] A filter system for main domain and TLD's.
 - [ ] Add colors (so l33t. /s)
-- [ ] A filter system for main domain and TLD's.
 - [ ] Get additional sub-domains from crt.sh
