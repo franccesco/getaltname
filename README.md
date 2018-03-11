@@ -81,6 +81,12 @@ $ git clone https://github.com/franccesco/getaltname.git
 $ pip install -r requirements.txt
 ```
 
+For the **copy&paste** mechanism you will have to install xclip package.
+**Debian/Ubuntu/Mint:**
+```sh
+$ apt install xclip
+```
+
 # TO-DO
 - [x] File output
 - [x] Output to clipboard
