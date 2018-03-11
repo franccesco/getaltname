@@ -17,6 +17,7 @@ You can read more about how to do this _manually_ from my blog post on [getroot.
 - [x] Removes duplication for **www** subdomains (e.g. example.com and www.example.com)
 - [x] Copy the **output directly to clipboard** as a single line string or as a list
 - [x] A filter system for main domain and TLD's.
+- [x] Colors
 
 ## What's to be added in a near future?
 - [ ] Get additional sub-domains from crt.sh
@@ -40,6 +41,9 @@ optional arguments:
 ```
 
 You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
+
+### Example output
+[![Image Example](/assets/screenshot.png)](/getaltname/assets/screenshot.png)
 
 ## Demonstration
 <script src="https://asciinema.org/a/01j0mhxOmXI4UOQiq6iNStDxn.js" id="asciicast-01j0mhxOmXI4UOQiq6iNStDxn" async></script>
