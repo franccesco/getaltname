@@ -29,37 +29,7 @@ You can output to a text file and **also copy the output to you clipboard** as a
 # Example
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
 
-```sh
-$ python getaltname.py microsoft.com
-118 SANs found from microsoft.com
-==================================
-biztalk.org
-microsoft.pl
-microsoft.pt
-microsoftedge.com
-winhec.net
-microsoft.ro
-windowsmobilepartnerspotlight.com
-microsoftcloud.com
-clientsecurity.net
-msdngeekspeak.com
-xbox.com
-windowsembeddedpartner.com
-businessreadylicensing.com
-mymicrosoft.com
-scriptjunkie.com
-partnerguide.com
-hololens.com
-microsoftband.com
-powerpointradio.com
-microsoft.tv
-hyper-v.com
-microsofthealth.com
-microsoft.eu
-microsoft.lt
-microsoft.ee
--- SNIP --
-```
+![Example Image](screenshot.png)
 
 # Installation
 Required libraries:
@@ -92,5 +62,5 @@ $ apt install xclip
 - [x] Clean sub-domains wildcards
 - [x] Remove duplicates
 - [x] A filter system for main domain and TLD's.
-- [ ] Add colors (so l33t. /s)
+- [x] Add colors (so l33t. /s)
 - [ ] Get additional sub-domains from crt.sh

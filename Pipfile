@@ -15,6 +15,7 @@ pyopenssl = "*"
 ndg-httpsclient = "*"
 pyperclip = "*"
 tldextract = "*"
+termcolor = "*"
 
 
 [dev-packages]

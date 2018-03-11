@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.3.0
+# Version: 0.4.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -33,14 +33,15 @@ import re
 import ssl
 import OpenSSL
 import argparse
-import colorama
 import pyperclip
 from tldextract import extract
-from ndg.httpsclient.subj_alt_name import SubjectAltName
+from colorama import init
+from termcolor import colored
 from pyasn1.codec.der import decoder
+from ndg.httpsclient.subj_alt_name import SubjectAltName
 
 # starting Colorama
-colorama.init()
+init()
 
 # CLI argumentation
 parser = argparse.ArgumentParser(
@@ -107,7 +108,8 @@ def get_san(hostname, port, debug=False):
     try:
         cert = ssl.get_server_certificate((args.hostname, args.port))
     except Exception as e:
-        print('FATAL: Could not connect to server.')
+        err = colored('FATAL: Could not connect to server.', 'white', 'on_red')
+        print(err, end='\n')
         if debug:
             raise e
         exit()
@@ -146,16 +148,25 @@ def output(subdomains, destination):
             file_object.write('{}\n'.format(line))
 
 
+def report(subdomain_list):
+    """Reports if subdomains were found."""
+    if len(subdomain_list) > 0:
+        # print discovery report and a separator ('—') as long as the message
+        message = "{} SAN's found from {}\n".format(len(sans), args.hostname)
+        separator = '—' * (len(message) - 1)
+        print(colored(message + separator, 'green'))
+
+        # print each subdomain found
+        for subject in sans:
+            print(colored('>> ', 'green') + subject)
+    else:
+        print(colored("No SAN's were found.", 'white', 'on_red'))
+
+
 sans = get_san(args.hostname, args.port, args.debug)
 
-# print discovery report and a separator ('=') as long as the message
-message = "{} SAN's found from {}".format(len(sans), args.hostname)
-print(message)
-print('=' * len(message))
-
-# print each subdomain found
-for subject in sans:
-    print(subject)
+# report message
+report(sans)
 
 # write to output file
 if args.output:
