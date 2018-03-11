@@ -5,7 +5,7 @@
 layout: default
 ---
 
-## What is this tool about?
+## Extract subdomains with GAN
 GetAltName (or **GAN**) is a tool that **extracts sub-domains or virtual domains directly from SSL certificates** found in HTTP**S** sites. It returns a handy list of sub-domains to ease the phase of information gathering in a pen-testing assessment where you can find an interesting amount of data.
 
 You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [Spanish].
