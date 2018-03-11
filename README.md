@@ -32,7 +32,7 @@ In this case the tool give you sub-domains that you probably didn't find with a 
 
 ```sh
 $ python getaltname.py microsoft.com
-118 SAN's found from microsoft.com
+118 SANs found from microsoft.com
 ==================================
 biztalk.org
 microsoft.pl
@@ -71,11 +71,13 @@ Required libraries:
 
 **Installation with pipenv**:
 ```sh
+$ git clone https://github.com/franccesco/getaltname.git
 $ pipenv install
 ```
 
 **Installation with Pip:**
 ```sh
+$ git clone https://github.com/franccesco/getaltname.git
 $ pip install -r requirements.txt
 ```
 
