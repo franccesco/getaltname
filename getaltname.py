@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.2.1
+# Version: 0.2.2
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -35,6 +35,7 @@ import OpenSSL
 import argparse
 import colorama
 import pyperclip
+from tldextract import extract
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 from pyasn1.codec.der import decoder
 
@@ -63,8 +64,8 @@ args = parser.parse_args()
 def match_domain_only(subdomain_list):
     """Returns a list with the specified domain only."""
     match_list = []
-    matching_domain = args.hostname
-
+    full_domain = extract(args.hostname)
+    matching_domain = '{}.{}'.format(full_domain.domain, full_domain.suffix)
     for domain in subdomain_list:
         pattern = '.*\.{}$'.format(matching_domain)
         matched_domain = re.search(pattern, domain)
