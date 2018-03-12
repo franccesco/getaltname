@@ -1,5 +1,5 @@
 # GetAltName
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname)
 
 
 GetAltName it's a little script that can extract Subject Alt Names for SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names or virtual servers.
