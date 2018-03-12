@@ -10,7 +10,7 @@ GetAltName (or **GAN**) is a tool that **extracts sub-domains or virtual domains
 
 You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [Spanish].
 
-## What features does it have?
+## Roadmap
 
 - [x] Returns a list of **unique** subdomains.
 - [x] Strip subdomain **wildcards**.
@@ -23,7 +23,7 @@ You can read more about how to do this _manually_ from my blog post on [getroot.
 ## What's to be added in a near future?
 - [ ] [Ideas/suggestions are very welcome.](https://github.com/franccesco/getaltname/issues)
 
-# Usage:
+## Usage:
 ```
 usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT] [-c {l,s}]
                      [-d]
@@ -43,14 +43,18 @@ optional arguments:
   -d, --debug                           Set debug enable
 ```
 
-You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
+- With **`-m`** GAN can **return a list of subdomains ending in the domain you previously specified**. For example, if you're analyzing _google.com_ you will get _youtube.com_ and other domains, if you only want subdomains belonging to _google.com_ then you can filter out those domains with **`-m`**
+- **Select a custom port with `-p`**. This is useful if the server is on another port besides 443
+- **[crt.sh](https://crt.sh/) integration**. You can now append results of crt.sh into your extracted subdomains list.
+- **Copy to clipboard with option `-c`**. This argument gives you two options, copy the contents of the subdomain list in a _List_ with **`-c l`** or in a _single string_ style with **`-c s`**. This is useful if you need a quick way to analyze subdomain, say, with Nmap to provide a list of domains in a single string without having to load a file with **-iL**.
 
-### Example output
+## Screenshot
 [![Image Example](/assets/screenshot.png)](/getaltname/assets/screenshot.png)
 
 ## Demonstration
 
 <script src="https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o.js" id="asciicast-tpebJeCEThMLDuDEXu1k1oz1o" async></script>
+_[You can also watch the demo here.](https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o)_
 
 ## Installation
 Required libraries:
