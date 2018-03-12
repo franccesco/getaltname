@@ -6,12 +6,9 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
-  - pip install gtk
-  - pip install PyQt4
 script:
   - flake8 .
 after_script:
   - ./getaltname.py google.com
   - ./getaltname.py google.com -m
-  - ./getaltname.py google.com -m -c s
-  - ./getaltname.py microsoft.com -c l
+  - ./getaltname.py starbucks.com -s 10
