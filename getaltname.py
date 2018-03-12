@@ -31,9 +31,12 @@
 
 import re
 import ssl
+import json
 import OpenSSL
+import requests
 import argparse
 import pyperclip
+from tqdm import tqdm
 from tldextract import extract
 from colorama import init
 from termcolor import colored
@@ -50,6 +53,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument('hostname', type=str, help='Host to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
+parser.add_argument('-s', '--search-crt',
+                    help='Retrieve subdomains found in crt.sh',
+                    nargs='?', type=int, const=5)
 parser.add_argument('-m', '--matching-domain',
                     help='Show matching domain name only', action='store_true')
 parser.add_argument('-o', '--output', type=str,
@@ -93,7 +99,7 @@ def clean_san_list(subdomain_list, domain_only=False):
         match_list = match_domain_only(subdomain_list)
         return match_list
 
-    return set(subdomain_list)
+    return set(sorted(subdomain_list))
 
 
 def get_san(hostname, port, debug=False):
@@ -112,7 +118,7 @@ def get_san(hostname, port, debug=False):
         print(err, end='\n')
         if debug:
             raise e
-        exit()
+        exit(1)
 
     # requesting certificate
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
@@ -136,9 +142,57 @@ def get_san(hostname, port, debug=False):
                         component = name.getComponentByPosition(entry)
                         subdomains.append(str(component.getComponent()))
 
+    # merge list results from crt.sh if found.
+    if args.search_crt:
+        crt_subdomains = search_crt(hostname)
+        if crt_subdomains is not False:
+            subdomains = list(subdomains) + list(crt_subdomains)
+
     # return a unique set of subdomains without wildcards
     filtered_domains = clean_san_list(subdomains, args.matching_domain)
-    return filtered_domains
+    return set(sorted(filtered_domains))
+
+
+def search_crt(domain):
+    """Search subdomain on crt.sh to retrieve additional subdomains."""
+
+    # strip subdomain from request
+    full_domain = extract(domain)
+    domain = '{}.{}'.format(full_domain.domain, full_domain.suffix)
+    subdomain_list = []
+    request_url = 'https://crt.sh/?q=%.{}&output=json'.format(domain)
+
+    # try to reach crt.sh, sometimes it takes too long
+    # to process a request and end up throwing a 404
+    try:
+        request_json = requests.get(request_url, timeout=args.search_crt)
+    except requests.exceptions.ReadTimeout as e:
+        timeout_msg = colored('FATAL: crt.sh timed out.', 'white', 'on_red')
+        print(timeout_msg, end='\n')
+
+        # explain why a timeout is needed
+        print(('Sometimes crt.sh takes too long trying to process '
+               'large data sets and returns a \'404\' instead. This is beyond '
+               'my power to fix, try another server, you might get lucky.'))
+        exit(1)
+
+    # if returned status is not 'OK' then return 'False' and move on
+    if request_json.status_code != 200:
+        return False
+
+    # crt.sh has JSON output currently broken, replacing endings like "}{"
+    # with "},{" and enclosing the whole JSON in "[]" seems to fix it.
+    request_json = request_json.text.replace('}{', '},{')
+    fixed_json = json.loads('[{}]'.format(request_json))
+
+    # loops through a list of dictionaries and extracts'name_value' contents
+    for extension_id, value in enumerate(fixed_json):
+        subdomain = fixed_json[extension_id]['name_value']
+        subdomain_list.append(subdomain)
+
+    # strip wildcards from subdomain
+    # subdomains = clean_san_list(subdomain_list)
+    return set(sorted(subdomain_list))
 
 
 def output(subdomains, destination):
@@ -157,7 +211,7 @@ def report(subdomain_list):
         print(colored(message + separator, 'green'))
 
         # print each subdomain found
-        for subject in sans:
+        for subject in sorted(sans):
             print(colored('>> ', 'green') + subject)
     else:
         print(colored("No SAN's were found.", 'white', 'on_red'))
