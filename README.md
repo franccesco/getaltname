@@ -67,3 +67,10 @@ $ apt install xclip
 - [x] A filter system for main domain and TLD's.
 - [x] Add colors (so l33t. /s)
 - [x] Get additional sub-domains from crt.sh
+
+# Contribution
+
+Contribution is welcome, just remember:
+* **Fork** the repo.
+* Make changes to the **_develop_** branch.
+* Make a **Pull Request.**
