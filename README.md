@@ -9,19 +9,22 @@ You can read more about how this tool works from my post in [getroot.info](https
 
 # Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-m] [-o OUTPUT] [-c {l,s}] [-d] hostname
+usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT] [-c {l,s}]
+                     [-d]
+                     hostname
 
 positional arguments:
-  hostname                     Host to analyze.
+  hostname                              Host to analyze.
 
 optional arguments:
-  -h, --help                   show this help message and exit
-  -p PORT, --port PORT         Destiny port (default 443)
-  -m, --matching-domain        Show matching domain name only
-  -o OUTPUT, --output OUTPUT   Set output filename
-  -c {l,s}, --clipboard {l,s}  Copy the output to the clipboard as a List or a
-                               Single string
-  -d, --debug                  Set debug enable
+  -h, --help                            show this help message and exit
+  -p PORT, --port PORT                  Destiny port (default 443)
+  -s [timeout], --search-crt [timeout]  Retrieve subdomains found in crt.sh
+  -m, --matching-domain                 Show matching domain name only
+  -o OUTPUT, --output OUTPUT            Set output filename
+  -c {l,s}, --clipboard {l,s}           Copy the output to the clipboard as a
+                                        List or a Single string
+  -d, --debug                           Set debug enable
 ```
 
 You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
@@ -63,4 +66,4 @@ $ apt install xclip
 - [x] Remove duplicates
 - [x] A filter system for main domain and TLD's.
 - [x] Add colors (so l33t. /s)
-- [ ] Get additional sub-domains from crt.sh
+- [x] Get additional sub-domains from crt.sh

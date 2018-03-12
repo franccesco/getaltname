@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 0.4.0
+# Version: 1.0.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
 #
-# Usage: getaltname.py -p [ssl_port] [host]
+# Usage: ./getaltname.py [host]
 #
 # MIT License
 #
@@ -36,7 +36,6 @@ import OpenSSL
 import requests
 import argparse
 import pyperclip
-from tqdm import tqdm
 from tldextract import extract
 from colorama import init
 from termcolor import colored
@@ -53,7 +52,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('hostname', type=str, help='Host to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
-parser.add_argument('-s', '--search-crt',
+parser.add_argument('-s', '--search-crt', metavar='timeout',
                     help='Retrieve subdomains found in crt.sh',
                     nargs='?', type=int, const=5)
 parser.add_argument('-m', '--matching-domain',
