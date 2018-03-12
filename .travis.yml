@@ -1,0 +1,14 @@
+language: python
+python:
+  - '3.6'
+before_install:
+  - apt install xclip
+install:
+  - pip install -r requirements.txt
+script:
+  - pipenv run flake8 .
+after_script:
+  - ./getaltname.py google.com
+  - ./getaltname.py google.com -m
+  - ./getaltname.py google.com -m -c s
+  - ./getaltname.py microsoft.com -c l
