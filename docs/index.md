@@ -50,7 +50,7 @@ You can output to a text file and **also copy the output to you clipboard** as a
 
 ## Demonstration
 
-<script src="https://asciinema.org/a/01j0mhxOmXI4UOQiq6iNStDxn.js" id="asciicast-01j0mhxOmXI4UOQiq6iNStDxn" async></script>
+<script src="https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o.js" id="asciicast-tpebJeCEThMLDuDEXu1k1oz1o" async></script>
 
 ## Installation
 Required libraries:
@@ -58,6 +58,8 @@ Required libraries:
 * ndg-httpsclient
 * pyperclip
 * requests
+* tldextract
+* termcolor
 
 **Installation with pipenv**:
 ```sh
