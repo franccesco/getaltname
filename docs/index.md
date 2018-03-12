@@ -45,7 +45,7 @@ optional arguments:
 
 - With **`-m`** GAN can **return a list of subdomains ending in the domain you previously specified**. For example, if you're analyzing _google.com_ you will get _youtube.com_ and other domains, if you only want subdomains belonging to _google.com_ then you can filter out those domains with **`-m`**
 - **Select a custom port with `-p`**. This is useful if the server is on another port besides 443
-- **[crt.sh](https://crt.sh/) integration**. You can now append results of crt.sh into your extracted subdomains list.
+- **[crt.sh](https://crt.sh/) integration with `-s`**. You can now append results of crt.sh into your extracted subdomains list.
 - **Copy to clipboard with option `-c`**. This argument gives you two options, copy the contents of the subdomain list in a _List_ with **`-c l`** or in a _single string_ style with **`-c s`**. This is useful if you need a quick way to analyze subdomain, say, with Nmap to provide a list of domains in a single string without having to load a file with **-iL**.
 
 ## Screenshot
