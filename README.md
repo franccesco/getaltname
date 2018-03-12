@@ -1,4 +1,7 @@
 # GetAltName
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg)
+
+
 GetAltName it's a little script that can extract Subject Alt Names for SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names or virtual servers.
 
 It's useful in a discovery phase of a pen-testing assessment, this tool can provide you with more information about your target and scope.
