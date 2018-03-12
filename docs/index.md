@@ -57,7 +57,8 @@ optional arguments:
 _[You can also watch the demo here.](https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o)_
 
 ## Installation
-Required libraries:
+### Required:
+* **python3**
 * colorama
 * ndg-httpsclient
 * pyperclip
