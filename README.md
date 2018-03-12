@@ -40,6 +40,7 @@ Required libraries:
 * ndg-httpsclient
 * pyperclip
 * requests
+* tldextract
 
 **Installation with pipenv**:
 ```sh
