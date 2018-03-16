@@ -10,12 +10,13 @@ name = "pypi"
 requests = "*"
 colorama = "*"
 cryptography = "*"
-pyopenssl = "*"
+pyOpenSSL = "*"
 "pyasn1" = "*"
 ndg-httpsclient = "*"
 pyperclip = "*"
 tldextract = "*"
 termcolor = "*"
+tqdm = "*"
 
 
 [dev-packages]
