@@ -36,9 +36,13 @@ import OpenSSL
 import requests
 import argparse
 import pyperclip
-from tldextract import extract
+import xml.etree.ElementTree as ET
+
+from tqdm import tqdm
 from colorama import init
+from os.path import isfile
 from termcolor import colored
+from tldextract import extract
 from pyasn1.codec.der import decoder
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 
@@ -49,7 +53,7 @@ init()
 parser = argparse.ArgumentParser(
     formatter_class=lambda
     prog: argparse.HelpFormatter(prog, max_help_position=100))
-parser.add_argument('hostname', type=str, help='Host to analyze.')
+parser.add_argument('hostname', type=str, help='Host or Nmap XML to analyze.')
 parser.add_argument('-p', '--port', type=int,
                     default=443, help='Destiny port (default 443)')
 parser.add_argument('-s', '--search-crt', metavar='timeout',
@@ -101,7 +105,7 @@ def clean_san_list(subdomain_list, domain_only=False):
     return set(sorted(subdomain_list))
 
 
-def get_san(hostname, port, debug=False):
+def get_san(hostname, port, xml_parse=False):
     """Gets Subject Alternative Names from requested host.
     Thanks to Cato- for this piece of code:
     https://gist.github.com/cato-/6551668"""
@@ -111,12 +115,12 @@ def get_san(hostname, port, debug=False):
 
     # Tries to connect to server, exits on error unless Traceback is requested
     try:
-        cert = ssl.get_server_certificate((args.hostname, args.port))
+        cert = ssl.get_server_certificate((hostname, port))
     except Exception as e:
+        if xml_parse:
+            return []
         err = colored('FATAL: Could not connect to server.', 'white', 'on_red')
-        print(err, end='\n')
-        if debug:
-            raise e
+        print(err, end='\n\n')
         exit(1)
 
     # requesting certificate
@@ -189,9 +193,24 @@ def search_crt(domain):
         subdomain = fixed_json[extension_id]['name_value']
         subdomain_list.append(subdomain)
 
-    # strip wildcards from subdomain
-    # subdomains = clean_san_list(subdomain_list)
     return set(sorted(subdomain_list))
+
+
+def parse_nmap(nmap_xml):
+    """Returns hosts with HTTPS ports."""
+    report = ET.parse(nmap_xml)
+    hosts_to_scan = {}
+    for host in report.iter('host'):
+        ports = []
+        for port in host[3].findall('port'):
+            # find every port running a http + ssl service
+            if 'http' and 'ssl' in port[1].attrib.values():
+                # append every found port to a address
+                ports.append(port.attrib['portid'])
+                hosts_to_scan[host[1].attrib['addr']] = ports
+            else:
+                continue
+    return hosts_to_scan
 
 
 def output(subdomains, destination):
@@ -201,32 +220,63 @@ def output(subdomains, destination):
             file_object.write('{}\n'.format(line))
 
 
-def report(subdomain_list):
+def report_single(subdomain_list, hostname=args.hostname):
     """Reports if subdomains were found."""
     if len(subdomain_list) > 0:
         # print discovery report and a separator ('—') as long as the message
-        message = "{} SAN's found from {}\n".format(len(sans), args.hostname)
+        message = "{} SAN's found from {}\n".format(len(sans), hostname)
         separator = '—' * (len(message) - 1)
         print(colored(message + separator, 'green'))
 
         # print each subdomain found
         for subject in sorted(sans):
             print(colored('>> ', 'green') + subject)
+        print('\n', end='')
     else:
         print(colored("No SAN's were found.", 'white', 'on_red'))
+        print('\n', end='')
 
 
-sans = get_san(args.hostname, args.port, args.debug)
+def collect_report(subdomain_list, hostname, port):
+    if len(subdomain_list) > 0:
+        message = "\n{} SAN's found from {}:{}\n".format(
+            len(sans), hostname, port
+        )
+        separator = '—' * (len(message) - 1)
+        san_report = colored(message + separator, 'green')
 
-# report message
-report(sans)
+        for subject in sorted(sans):
+            san_report += colored('\n>> ', 'green') + subject
+        return(san_report)
+    else:
+        return False
 
-# write to output file
-if args.output:
-    output(sans, args.output)
 
-# copy to clipboard, 's' for string and 'l' for list
-if args.clipboard == 's':
-    pyperclip.copy(' '.join(sans))
-elif args.clipboard == 'l':
-    pyperclip.copy('\n'.join(sans))
+def clipboard_output(subdomain_list, output_style=args.clipboard):
+    """Copy to clipboard, 's' for string and 'l' for list."""
+    if output_style == 's':
+        pyperclip.copy(' '.join(subdomain_list))
+    elif output_style == 'l':
+        pyperclip.copy('\n'.join(subdomain_list))
+
+
+if not isfile(args.hostname):
+    sans = get_san(args.hostname, args.port, args.debug)
+    report_single(sans)
+
+    if args.output:
+        output(sans, args.output)
+
+    if args.clipboard:
+        clipboard_output(sans, args.clipboard)
+
+else:
+    hosts = parse_nmap(args.hostname)
+    full_report = []
+    for host, ports in tqdm(hosts.items()):
+        for port in ports:
+            sans = get_san(host, port, xml_parse=True)
+            full_report.append(collect_report(sans, host, port))
+    for report in full_report:
+        if report is not False:
+            print(report)
