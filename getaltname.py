@@ -59,6 +59,8 @@ parser.add_argument('-m', '--matching-domain',
                     help='Show matching domain name only', action='store_true')
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
+parser.add_argument('-f', '--format', type=str,
+                    help='Set output format', choices=['json', 'text'])
 parser.add_argument('-c', '--clipboard',
                     help='Copy the output to the clipboard as a List \
                     or a Single string', choices=['l', 's'])
@@ -194,26 +196,40 @@ def search_crt(domain):
     return set(sorted(subdomain_list))
 
 
-def output(subdomains, destination):
+def output(subdomains, format_output, destination):
     """Writes the subdomain list to a destination."""
     with open(destination, 'w') as file_object:
-        for line in subdomains:
-            file_object.write('{}\n'.format(line))
+        if format_output == 'json':
+            file_object.write('{}'.format(json_format(subdomains)))
+        else:
+            for line in subdomains:
+                file_object.write('{}\n'.format(line))
+
+
+def json_format(subdomains):
+    """Output JSON format."""
+    listdomains = {'count': len(subdomains), 'domains': []}
+    for domain in subdomains:
+        listdomains['domains'].append(domain)
+    return json.dumps(listdomains)
 
 
 def report(subdomain_list):
     """Reports if subdomains were found."""
-    if len(subdomain_list) > 0:
-        # print discovery report and a separator ('—') as long as the message
-        message = "{} SAN's found from {}\n".format(len(sans), args.hostname)
-        separator = '—' * (len(message) - 1)
-        print(colored(message + separator, 'green'))
-
-        # print each subdomain found
-        for subject in sorted(sans):
-            print(colored('>> ', 'green') + subject)
+    if args.format == 'json':
+        print(json_format(subdomain_list))
     else:
-        print(colored("No SAN's were found.", 'white', 'on_red'))
+        if len(subdomain_list) > 0:
+            # print discovery report and a separator ('—') as long as the message
+            message = "{} SAN's found from {}\n".format(len(sans), args.hostname)
+            separator = '—' * (len(message) - 1)
+            print(colored(message + separator, 'green'))
+
+            # print each subdomain found
+            for subject in sorted(sans):
+                print(colored('>> ', 'green') + subject)
+        else:
+            print(colored("No SAN's were found.", 'white', 'on_red'))
 
 
 sans = get_san(args.hostname, args.port, args.debug)
@@ -223,7 +239,7 @@ report(sans)
 
 # write to output file
 if args.output:
-    output(sans, args.output)
+    output(sans, args.format, args.output)
 
 # copy to clipboard, 's' for string and 'l' for list
 if args.clipboard == 's':
