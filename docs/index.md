@@ -12,17 +12,21 @@ GetAltName (or **GAN**) is a tool that **extracts sub-domains or virtual domains
 
 You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [Spanish - _written on November 13, 2017_].
 
-## Roadmap
-
-- [x] Returns a list of **unique** subdomains.
-- [x] Strip subdomain **wildcards**.
-- [x] Removes duplication for **www** subdomains (e.g. example.com and www.example.com)
-- [x] Copy the **output directly to clipboard** as a single line string or as a list
+# Features
+- [x] File output
+- [x] Output to clipboard
+- [x] Clean sub-domains wildcards
+- [x] Remove duplicates
 - [x] A filter system for main domain and TLD's.
+- [x] Add colors (so l33t. /s)
 - [x] Get additional sub-domains from crt.sh
-- [x] Colors
+- [x] Read Nmap XML and analyze them
+- [x] JSON Output
 
-## What's to be added in a near future?
+# What's on the road
+- [ ] Unit Tests
+- [ ] HTML Report
+- [ ] Multithreading
 - [ ] [Ideas/suggestions are very welcome.](https://github.com/franccesco/getaltname/issues)
 
 ## Usage:

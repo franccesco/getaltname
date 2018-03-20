@@ -45,6 +45,7 @@ Required libraries:
 * pyperclip
 * requests
 * tldextract
+* tqdm
 
 **Installation with pipenv**:
 ```sh
@@ -74,6 +75,9 @@ $ apt install xclip
 - [x] Get additional sub-domains from crt.sh
 - [x] Read Nmap XML and analyze them
 - [x] JSON Output
+
+# What's on the road
+- [ ] Unit Tests
 - [ ] HTML Report
 - [ ] Multithreading
 
