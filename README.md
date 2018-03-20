@@ -12,18 +12,18 @@ You can read more about how this tool works from my post in [getroot.info](https
 
 # Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT] [-c {l,s}]
-                     [-d]
+usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT]
+                     [-f {json,text}] [-c {l,s}] [-d]
                      hostname
 
 positional arguments:
-  hostname                              Host to analyze.
+  hostname                              Host or Nmap XML to analyze.
 
 optional arguments:
   -h, --help                            show this help message and exit
   -p PORT, --port PORT                  Destiny port (default 443)
   -s [timeout], --search-crt [timeout]  Retrieve subdomains found in crt.sh
-  -m, --matching-domain                 Show matching domain name only
+  -m, --match-domain                    Show match domain name only
   -o OUTPUT, --output OUTPUT            Set output filename
   -f {json,text}, --format {json,text}  Set output format
   -c {l,s}, --clipboard {l,s}           Copy the output to the clipboard as a
