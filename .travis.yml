@@ -12,3 +12,5 @@ after_script:
   - ./getaltname.py google.com
   - ./getaltname.py google.com -m
   - ./getaltname.py starbucks.com -s 10
+  - ./getaltname.py facebook.com -f json
+  - ./getaltname.py microsoft.com -o micro_domains.out -f json
