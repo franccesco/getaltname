@@ -63,6 +63,8 @@ parser.add_argument('-m', '--matching-domain',
                     help='Show matching domain name only', action='store_true')
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
+parser.add_argument('-f', '--format', type=str,
+                    help='Set output format', choices=['json', 'text'])
 parser.add_argument('-c', '--clipboard',
                     help='Copy the output to the clipboard as a List \
                     or a Single string', choices=['l', 's'])
@@ -213,28 +215,44 @@ def parse_nmap(nmap_xml):
     return hosts_to_scan
 
 
-def output(subdomains, destination):
+def output(subdomains, format_output, destination):
     """Writes the subdomain list to a destination."""
     with open(destination, 'w') as file_object:
-        for line in subdomains:
-            file_object.write('{}\n'.format(line))
+        if format_output == 'json':
+            file_object.write('{}'.format(json_format(subdomains)))
+        else:
+            for line in subdomains:
+                file_object.write('{}\n'.format(line))
+
+
+def json_format(subdomains):
+    """Output JSON format."""
+    listdomains = {'count': len(subdomains), 'domains': []}
+    for domain in subdomains:
+        listdomains['domains'].append(domain)
+    return json.dumps(listdomains)
 
 
 def report_single(subdomain_list, hostname=args.hostname):
     """Reports if subdomains were found."""
-    if len(subdomain_list) > 0:
-        # print discovery report and a separator ('—') as long as the message
-        message = "{} SAN's found from {}\n".format(len(sans), hostname)
-        separator = '—' * (len(message) - 1)
-        print(colored(message + separator, 'green'))
 
-        # print each subdomain found
-        for subject in sorted(sans):
-            print(colored('>> ', 'green') + subject)
-        print('\n', end='')
+    if args.format == 'json':
+        print(json_format(subdomain_list))
     else:
-        print(colored("No SAN's were found.", 'white', 'on_red'))
-        print('\n', end='')
+        if len(subdomain_list) > 0:
+            # print discovery report and a separator ('—')
+            message = "{} SAN's found from {}\n".format(
+                len(sans), args.hostname)
+            separator = '—' * (len(message) - 1)
+            print(colored(message + separator, 'green'))
+
+            # print each subdomain found
+            for subject in sorted(sans):
+                print(colored('>> ', 'green') + subject)
+            print('\n', end='')
+        else:
+            print(colored("No SAN's were found.", 'white', 'on_red'))
+            print('\n', end='')
 
 
 def collect_report(subdomain_list, hostname, port):
@@ -264,11 +282,12 @@ if not isfile(args.hostname):
     sans = get_san(args.hostname, args.port, args.debug)
     report_single(sans)
 
-    if args.output:
-        output(sans, args.output)
-
     if args.clipboard:
         clipboard_output(sans, args.clipboard)
+
+    # write to output file
+    if args.output:
+        output(sans, args.format, args.output)
 
 else:
     hosts = parse_nmap(args.hostname)
