@@ -25,6 +25,7 @@ optional arguments:
   -s [timeout], --search-crt [timeout]  Retrieve subdomains found in crt.sh
   -m, --matching-domain                 Show matching domain name only
   -o OUTPUT, --output OUTPUT            Set output filename
+  -f {json,text}, --format {json,text}  Set output format
   -c {l,s}, --clipboard {l,s}           Copy the output to the clipboard as a
                                         List or a Single string
   -d, --debug                           Set debug enable
@@ -71,6 +72,13 @@ $ apt install xclip
 - [x] A filter system for main domain and TLD's.
 - [x] Add colors (so l33t. /s)
 - [x] Get additional sub-domains from crt.sh
+- [x] Read Nmap XML and analyze them
+- [x] JSON Output
+- [ ] HTML Report
+- [ ] Multithreading
+
+# Contributors
+* [**Djerfy**](https://github.com/djerfy)
 
 # Contribution
 
