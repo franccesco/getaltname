@@ -248,7 +248,7 @@ def report_single(subdomain_list, hostname=args.hostname):
 
             # print each subdomain found
             for subject in sorted(sans):
-                print(colored('>> ', 'green') + subject)
+                print(colored('→ ', 'green') + subject)
             print('\n', end='')
         else:
             print(colored("No SAN's were found.", 'white', 'on_red'))
@@ -264,7 +264,7 @@ def collect_report(subdomain_list, hostname, port):
         san_report = colored(message + separator, 'green')
 
         for subject in sorted(sans):
-            san_report += colored('\n>> ', 'green') + subject
+            san_report += colored('\n→ ', 'green') + subject
         return(san_report)
     else:
         return False
@@ -291,6 +291,13 @@ if not isfile(args.hostname):
 
 else:
     hosts = parse_nmap(args.hostname)
+
+    # if no hosts are found in XML then exits
+    if not any(hosts):
+        message = 'No hosts found in {}'.format(args.hostname)
+        print(colored(message, 'white', 'on_red'))
+        exit()
+
     full_report = []
     for host, ports in tqdm(hosts.items()):
         for port in ports:
