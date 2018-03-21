@@ -1,6 +1,6 @@
 # GetAltName
 
-[![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg)](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname)  [![GitHub license](https://img.shields.io/github/license/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/blob/master/LICENSE.md)
+[![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg)](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub license](https://img.shields.io/github/license/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/blob/master/LICENSE.md)
 
 
 GetAltName it's a little script that can extract Subject Alt Names for SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names or virtual servers.

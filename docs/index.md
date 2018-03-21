@@ -6,7 +6,7 @@ layout: default
 ---
 
 ## Extract subdomains with GAN
-![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![GitHub release](https://img.shields.io/github/release/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/releases) [![GitHub forks](https://img.shields.io/github/forks/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/network) [![GitHub stars](https://img.shields.io/github/stars/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/stargazers)
+![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub release](https://img.shields.io/github/release/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/releases) [![GitHub forks](https://img.shields.io/github/forks/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/network) [![GitHub stars](https://img.shields.io/github/stars/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/stargazers)
 
 GetAltName (or **GAN**) is a tool that **extracts sub-domains or virtual domains directly from SSL certificates** found in HTTP**S** sites. It returns a handy list of sub-domains to ease the phase of information gathering in a pen-testing assessment where you can find an interesting amount of data.
 

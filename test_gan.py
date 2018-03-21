@@ -20,7 +20,7 @@ class TestGetAltName(unittest.TestCase):
         """Test if get_san() exits correctly with non-existant domain."""
         with self.assertRaises(SystemExit) as cm:
             print('Testing non-existant domain name:')
-            subdomain_set = get_san(hostname='123oaenf.comasd', port=443)
+            get_san(hostname='123oaenf.comasd', port=443)
         exception = cm.exception
         self.assertEqual(exception.code, 1)
 
