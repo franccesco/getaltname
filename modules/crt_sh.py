@@ -24,7 +24,7 @@ def search_crt(domain, timeout=10):
     # try to reach crt.sh, sometimes it takes too long
     # to process a request and end up throwing a 404
     try:
-        request_json = requests.get(request_url, timeout)
+        request_json = requests.get(request_url, timeout=timeout)
     except requests.exceptions.ReadTimeout as e:
         timeout_msg = colored('FATAL: crt.sh timed out.', 'white', 'on_red')
         print(timeout_msg, end='\n')

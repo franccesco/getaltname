@@ -1,5 +1,6 @@
 import unittest
 from modules.get_san import get_san
+from modules.crt_sh import search_crt
 
 
 class TestGetAltName(unittest.TestCase):
@@ -42,6 +43,14 @@ class TestGetAltName(unittest.TestCase):
         subdomain_set = get_san(hostname='123oaenf.comasd',
                                 port=self.port, xml_parse=True)
         self.assertIsInstance(subdomain_set, list)
+
+    def test_crt_sh_timeout(self):
+        """Test if timeout and message are displayed correctly."""
+        with self.assertRaises(SystemExit) as cm:
+            print('Testing timeout in crt.sh:')
+            search_crt('google.com', timeout=5)
+        exception = cm.exception
+        self.assertEqual(exception.code, 1)
 
 
 if __name__ == '__main__':
