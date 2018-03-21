@@ -103,4 +103,4 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/python
-test.py
+test.*

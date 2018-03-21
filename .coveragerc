@@ -1,0 +1,6 @@
+[run]
+source =
+    .
+omit =
+    test.py
+    getaltname.py
