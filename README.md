@@ -1,5 +1,6 @@
 # GetAltName
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname)
+
+[![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg)](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname)  [![GitHub license](https://img.shields.io/github/license/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/blob/master/LICENSE.md)
 
 
 GetAltName it's a little script that can extract Subject Alt Names for SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names or virtual servers.
@@ -84,9 +85,15 @@ $ apt install xclip
 # Contributors
 * [**Djerfy**](https://github.com/djerfy)
 
-# Contribution
-
+# Contribution Guidelines
 Contribution is welcome, just remember:
 * **Fork** the repo.
 * Make changes to the **_develop_** branch.
 * Make a **Pull Request.**
+
+# Support this project
+If you like the project and would like to support me you can buy me a cup of coffee, you will also be inmortalized as a patreon, thank you 🙏.
+
+<a href="https://www.paypal.me/orozcofranccesco">
+  <img height="32" src="badges/paypal.png" />
+</a> <a href="https://www.buymeacoffee.com/franccesco" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a> <a href='https://ko-fi.com/V7V8AXFE' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
