@@ -79,6 +79,7 @@ $ apt install xclip
 
 # What's on the road
 - [ ] Unit Tests
+- [ ] Coverage Reports
 - [ ] HTML Report
 - [ ] Multithreading
 
