@@ -28,17 +28,16 @@ You can read more about how to do this _manually_ from my blog post on [getroot.
 - [x] Get additional sub-domains from crt.sh
 - [x] Read Nmap XML and analyze them
 - [x] JSON Output
+- [x] Unit Tests
 
 # What's on the road
-- [ ] Unit Tests
-- [ ] HTML Report
 - [ ] Multithreading
 - [ ] [Ideas/suggestions are very welcome.](https://github.com/franccesco/getaltname/issues)
 
 ## Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT]
-                     [-f {json,text}] [-c {l,s}] [-d]
+usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-q] [-o OUTPUT]
+                     [-f {json,text}] [-c {l,s}] [-d] [-V]
                      hostname
 
 positional arguments:
@@ -49,11 +48,13 @@ optional arguments:
   -p PORT, --port PORT                  Destiny port (default 443)
   -s [timeout], --search-crt [timeout]  Retrieve subdomains found in crt.sh
   -m, --match-domain                    Show match domain name only
+  -q, --quiet                           Supress output.
   -o OUTPUT, --output OUTPUT            Set output filename
   -f {json,text}, --format {json,text}  Set output format
   -c {l,s}, --clipboard {l,s}           Copy the output to the clipboard as a
                                         List or a Single string
   -d, --debug                           Set debug enable
+  -V, --version                         Print version information.
 ```
 
 ## Example

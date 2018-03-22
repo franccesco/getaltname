@@ -80,9 +80,6 @@ $ apt install xclip
 - [x] JSON Output
 - [x] Unit Tests
 - [x] Coverage Reports
-
-# What's on the road
-- [ ] HTML Report
 - [ ] Multithreading
 
 # Contributors
