@@ -27,31 +27,32 @@ def nmap_output(report, destination):
 
 def json_format(subdomains, hostname):
     """Output JSON format."""
-    hosts = {}
     listdomains = {'count': len(subdomains), 'domains': list(subdomains)}
     return json.dumps(listdomains, indent=2, sort_keys=True)
 
 
-def report_single(subdomain_list, hostname, format):
+def report_single(subdomain_list, hostname, format, quiet=False):
     """Reports if subdomains were found."""
 
     if format == 'json':
-        print(json_format(subdomain_list, hostname))
+        if not quiet:
+            print(json_format(subdomain_list, hostname))
     else:
-        if len(subdomain_list) > 0:
-            # print discovery report and a separator ('—')
-            message = "{} SAN's found from {}\n".format(
-                len(subdomain_list), hostname)
-            separator = '—' * (len(message) - 1)
-            print(colored(message + separator, 'green'))
+        if not quiet:
+            if len(subdomain_list) > 0:
+                # print discovery report and a separator ('—')
+                message = "{} SAN's found from {}\n".format(
+                    len(subdomain_list), hostname)
+                separator = '—' * (len(message) - 1)
+                print(colored(message + separator, 'green'))
 
-            # print each subdomain found
-            for subject in sorted(subdomain_list):
-                print(colored('→ ', 'green') + subject)
-            print('\n', end='')
-        else:
-            print(colored("No SAN's were found.", 'white', 'on_red'))
-            print('\n', end='')
+                # print each subdomain found
+                for subject in sorted(subdomain_list):
+                    print(colored('→ ', 'green') + subject)
+                print('\n', end='')
+            else:
+                print(colored("No SAN's were found.", 'white', 'on_red'))
+                print('\n', end='')
 
 
 def collect_report(subdomain_list, hostname, port):

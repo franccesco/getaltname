@@ -130,7 +130,7 @@ class TestGetAltName(unittest.TestCase):
         """Test if output from nmap scan was successful."""
         domains = {}
         domains[self.hostname] = {'count': len(self.subdomain_set),
-                         'subdomains': list(self.subdomain_set)}
+                                  'subdomains': list(self.subdomain_set)}
         nmap_output(domains, 'data.out')
         with open('data.out', 'r') as data:
             report = json.dumps(data.read())
