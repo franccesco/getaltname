@@ -2,5 +2,5 @@
 source =
     .
 omit =
-    test.py
+    test*
     getaltname.py
