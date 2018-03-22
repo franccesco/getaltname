@@ -5,7 +5,7 @@ import unittest
 from os import remove
 from modules.get_san import get_san
 from modules.crt_sh import search_crt
-from modules.report import output, report_single, collect_report
+from modules.report import output, report_single, collect_report, nmap_output
 from modules.nmap_parsing import parse_nmap
 
 
@@ -67,7 +67,8 @@ class TestGetAltName(unittest.TestCase):
     def test_subdomain_output(self):
         """Test if subdomain list is output correctly."""
         output(subdomains=self.subdomain_set,
-               format_output='text', destination='data.out')
+               format_output='text', destination='data.out',
+               hostname=self.hostname)
         with open('data.out', 'r') as raw_data:
             subdomains_output = raw_data.read()
             # strip last '\n' from loaded file
@@ -79,7 +80,7 @@ class TestGetAltName(unittest.TestCase):
 
     def test_subdomain_output_json(self):
         """Test if subdomain output is in JSON."""
-        output(self.subdomain_set, 'json', 'data.out')
+        output('', self.subdomain_set, 'json', 'data.out')
         with open('data.out', 'r') as json_data:
             self.assertTrue(json.load(json_data))
         remove('data.out')
@@ -111,7 +112,8 @@ class TestGetAltName(unittest.TestCase):
 
     def test_collect_report(self):
         """Test nmap report method collect_report()."""
-        report = collect_report(self.subdomain_set, self.hostname, self.port)
+        report = collect_report(
+            self.subdomain_set, self.hostname, self.port)
         self.assertIsInstance(report, str)
 
     def test_collect_report_empty(self):
@@ -123,6 +125,16 @@ class TestGetAltName(unittest.TestCase):
         """Test if nmap XML output is parsed correctly."""
         hosts_dict = parse_nmap(self.example_xml)
         self.assertIsInstance(hosts_dict, dict)
+
+    def test_nmap_output(self):
+        """Test if output from nmap scan was successful."""
+        domains = {}
+        domains[self.hostname] = {'count': len(self.subdomain_set),
+                         'subdomains': list(self.subdomain_set)}
+        nmap_output(domains, 'data.out')
+        with open('data.out', 'r') as data:
+            report = json.dumps(data.read())
+        self.assertTrue(json.loads(report))
 
 
 if __name__ == '__main__':

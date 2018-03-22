@@ -5,34 +5,38 @@
 import json
 from colorama import init
 from termcolor import colored
-
 # starting Colorama
 init()
 
 
-def output(subdomains, format_output, destination):
+def output(subdomains, hostname, format_output, destination):
     """Writes the subdomain list to a destination."""
     with open(destination, 'w') as file_object:
         if format_output == 'json':
-            file_object.write('{}'.format(json_format(subdomains)))
+            file_object.write('{}'.format(json_format(subdomains, hostname)))
         else:
             for line in subdomains:
                 file_object.write('{}\n'.format(line))
 
 
-def json_format(subdomains):
+def nmap_output(report, destination):
+    """Outputs NMAP XML results to a json or list file."""
+    with open(destination, 'w') as file_object:
+        file_object.write(str(report))
+
+
+def json_format(subdomains, hostname):
     """Output JSON format."""
-    listdomains = {'count': len(subdomains), 'domains': []}
-    for domain in subdomains:
-        listdomains['domains'].append(domain)
-    return json.dumps(listdomains)
+    hosts = {}
+    listdomains = {'count': len(subdomains), 'domains': list(subdomains)}
+    return json.dumps(listdomains, indent=2, sort_keys=True)
 
 
 def report_single(subdomain_list, hostname, format):
     """Reports if subdomains were found."""
 
     if format == 'json':
-        print(json_format(subdomain_list))
+        print(json_format(subdomain_list, hostname))
     else:
         if len(subdomain_list) > 0:
             # print discovery report and a separator ('—')
