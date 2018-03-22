@@ -1,6 +1,10 @@
 [run]
 source =
     .
+# excluding getaltname.py because argparse
+# doesn't handle too well unittests and
+# clipboard.py have a lot of issues with travis-ci
 omit =
-    test.py
+    test*
     getaltname.py
+    modules/clipboard.py

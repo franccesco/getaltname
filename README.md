@@ -3,18 +3,20 @@
 [![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg)](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub license](https://img.shields.io/github/license/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/blob/master/LICENSE.md)
 
 
-GetAltName it's a little script that can extract Subject Alt Names for SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names or virtual servers.
+**GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
 
-It's useful in a discovery phase of a pen-testing assessment, this tool can provide you with more information about your target and scope.
-
-This code is in alpha stage and has been rewritten from Ruby to Python, it doesn't do as much as it should. lots of things and features are missing, but it delivers, treat it as a quick-dirty-code. More features incoming, also you're welcome to contribute if you want.
+This code extract subdomain names from http**s** sites and return a list or json output of its findings. It is _**not**_ a subdomain brute-force tool, and you can [actually find those subdomains manually](https://gfycat.com/AnotherDizzyDodobird), this tools is about the automation of that process, it also offers the following features:
+* Input a **host or Nmap XML file** to scan and return subdomains.
+* **List or JSON output**, useful if you want to export data into other tools.
+* You can _optionally_ **filter out domain names** that doesn't match the domain name that you're analyzing.
+* **Copy to your clipboard** the domain names as a _list_ or _string_ if you don't want to deal with files, this is also useful for tools that doesn't accept file input.
 
 You can read more about how this tool works from my post in [getroot.info](https://getroot.info/tip-getaltname/) (in Spanish).
 
 # Usage:
 ```
 usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-o OUTPUT]
-                     [-f {json,text}] [-c {l,s}] [-d]
+                     [-f {json,text}] [-c {l,s}] [-d] [-V]
                      hostname
 
 positional arguments:
@@ -30,9 +32,8 @@ optional arguments:
   -c {l,s}, --clipboard {l,s}           Copy the output to the clipboard as a
                                         List or a Single string
   -d, --debug                           Set debug enable
+  -V, --version                         Print version information.
 ```
-
-You can output to a text file and **also copy the output to you clipboard** as a **L**ist or a **S**ingle line string, which is useful if you're trying to make a quick scan with _Nmap_ or other tools.
 
 # Example
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
@@ -46,6 +47,7 @@ Required libraries:
 * pyperclip
 * requests
 * tldextract
+* termcolor
 * tqdm
 
 **Installation with pipenv**:
@@ -76,15 +78,15 @@ $ apt install xclip
 - [x] Get additional sub-domains from crt.sh
 - [x] Read Nmap XML and analyze them
 - [x] JSON Output
+- [x] Unit Tests
+- [x] Coverage Reports
 
 # What's on the road
-- [ ] Unit Tests
-- [ ] Coverage Reports
 - [ ] HTML Report
 - [ ] Multithreading
 
 # Contributors
-* [**Djerfy**](https://github.com/djerfy)
+* [**Djerfy**](https://github.com/djerfy) - **JSON output**.
 
 # Contribution Guidelines
 Contribution is welcome, just remember:
@@ -93,7 +95,7 @@ Contribution is welcome, just remember:
 * Make a **Pull Request.**
 
 # Support this project
-If you like the project and would like to support me you can buy me a cup of coffee, you will also be inmortalized as a patreon, thank you 🙏.
+If you like the project and would like to support me you can buy me a cup of coffee, you will also be inmortalized as a patreon, thank you 🙏
 
 <a href="https://www.paypal.me/orozcofranccesco">
   <img height="32" src="badges/paypal.png" />

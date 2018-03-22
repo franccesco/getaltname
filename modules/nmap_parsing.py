@@ -18,6 +18,4 @@ def parse_nmap(nmap_xml):
                 # append every found port to a address
                 ports.append(port.attrib['portid'])
                 hosts_to_scan[host[1].attrib['addr']] = ports
-            else:
-                continue
     return hosts_to_scan

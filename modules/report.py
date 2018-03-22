@@ -51,6 +51,11 @@ def report_single(subdomain_list, hostname, format):
 
 
 def collect_report(subdomain_list, hostname, port):
+    """
+        A more specialized report for nmap parsing, it doesn't output anything
+        to stdout, it returns a report (string) for each finding, if there's
+        nothing to report, then return false.
+    """
     if len(subdomain_list) > 0:
         message = "\n{} SAN's found from {}:{}\n".format(
             len(subdomain_list), hostname, port
