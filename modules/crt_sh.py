@@ -35,10 +35,6 @@ def search_crt(domain, timeout=10):
                'my power to fix, try another server, you might get lucky.'))
         exit(1)
 
-    # if returned status is not 'OK' then return 'False' and move on
-    if request_json.status_code != 200:
-        return False
-
     # crt.sh has JSON output currently broken, replacing endings like "}{"
     # with "},{" and enclosing the whole JSON in "[]" seems to fix it.
     request_json = request_json.text.replace('}{', '},{')
