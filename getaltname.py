@@ -88,7 +88,7 @@ if not isfile(args.hostname):
         crt_sh=args.search_crt,
         match=args.match_domain
     )
-    report_single(sans, args.hostname, args.format)
+    report_single(sans, args.hostname, args.format, args.quiet)
 
     if args.clipboard:
         clipboard_output(sans, args.clipboard)
