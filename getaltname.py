@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 1.3.3
+# Version: 2.0.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -29,7 +29,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
+import json
 import argparse
 from tqdm import tqdm
 from colorama import init
@@ -38,9 +38,9 @@ from termcolor import colored
 
 # GAN Modules
 from modules.get_san import get_san
-from modules.clipboard import clipboard_output
 from modules.nmap_parsing import parse_nmap
-from modules.report import output, report_single, collect_report
+from modules.clipboard import clipboard_output
+from modules.report import output, report_single, collect_report, nmap_output
 
 # starting Colorama
 init()
@@ -57,6 +57,8 @@ parser.add_argument('-s', '--search-crt', metavar='timeout',
                     nargs='?', type=int, const=5)
 parser.add_argument('-m', '--match-domain',
                     help='Show match domain name only', action='store_true')
+parser.add_argument('-q', '--quiet', help='Supress output.',
+                    action='store_true')
 parser.add_argument('-o', '--output', type=str,
                     help='Set output filename')
 parser.add_argument('-f', '--format', type=str,
@@ -67,7 +69,7 @@ parser.add_argument('-c', '--clipboard',
 parser.add_argument('-d', '--debug',
                     help='Set debug enable', action='store_true')
 parser.add_argument('-V', '--version', action='version',
-                    help='Print version information.', version='1.3.3')
+                    help='Print version information.', version='2.0.0')
 args = parser.parse_args()
 
 
@@ -86,13 +88,13 @@ if not isfile(args.hostname):
         crt_sh=args.search_crt,
         match=args.match_domain
     )
-    report_single(sans, args.hostname, args.format)
+    report_single(sans, args.hostname, args.format, args.quiet)
 
     if args.clipboard:
         clipboard_output(sans, args.clipboard)
 
     if args.output:
-        output(sans, args.format, args.output)
+        output(sans, args.hostname, args.format, args.output)
 
 else:
     hosts = parse_nmap(args.hostname)
@@ -104,10 +106,31 @@ else:
         exit()
 
     full_report = []
-    for host, ports in tqdm(hosts.items()):
-        for port in ports:
-            sans = get_san(host, port, xml_parse=True)
-            full_report.append(collect_report(sans, host, port))
-    for report in full_report:
-        if report is not False:
-            print(report)
+    domains = []
+    if not args.format == 'json':
+        for host, ports in tqdm(hosts.items()):
+            for port in ports:
+                sans = get_san(host, port, xml_parse=True)
+                for san in sans:
+                    domains.append(san)
+                report = collect_report(sans, host, port)
+                full_report.append(report)
+        for report in full_report:
+            if report is not False:
+                if not args.quiet:
+                    print(report)
+        if args.output:
+            output(domains, 'host', 'text', args.output)
+    else:
+        domains = {}
+        for host, ports in tqdm(hosts.items()):
+            for port in ports:
+                sans = get_san(host, port, xml_parse=True)
+                count = len(sans)
+                domains[host] = {'count': count, 'subdomains': list(sans)}
+        json_report = json.dumps(domains, indent=2, sort_keys=True)
+        if not args.quiet:
+            print(json_report)
+
+        if args.output:
+            nmap_output(json_report, args.output)

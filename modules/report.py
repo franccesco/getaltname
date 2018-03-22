@@ -5,49 +5,54 @@
 import json
 from colorama import init
 from termcolor import colored
-
 # starting Colorama
 init()
 
 
-def output(subdomains, format_output, destination):
+def output(subdomains, hostname, format_output, destination):
     """Writes the subdomain list to a destination."""
     with open(destination, 'w') as file_object:
         if format_output == 'json':
-            file_object.write('{}'.format(json_format(subdomains)))
+            file_object.write('{}'.format(json_format(subdomains, hostname)))
         else:
             for line in subdomains:
                 file_object.write('{}\n'.format(line))
 
 
-def json_format(subdomains):
+def nmap_output(report, destination):
+    """Outputs NMAP XML results to a json or list file."""
+    with open(destination, 'w') as file_object:
+        file_object.write(str(report))
+
+
+def json_format(subdomains, hostname):
     """Output JSON format."""
-    listdomains = {'count': len(subdomains), 'domains': []}
-    for domain in subdomains:
-        listdomains['domains'].append(domain)
-    return json.dumps(listdomains)
+    listdomains = {'count': len(subdomains), 'domains': list(subdomains)}
+    return json.dumps(listdomains, indent=2, sort_keys=True)
 
 
-def report_single(subdomain_list, hostname, format):
+def report_single(subdomain_list, hostname, format, quiet=False):
     """Reports if subdomains were found."""
 
     if format == 'json':
-        print(json_format(subdomain_list))
+        if not quiet:
+            print(json_format(subdomain_list, hostname))
     else:
-        if len(subdomain_list) > 0:
-            # print discovery report and a separator ('—')
-            message = "{} SAN's found from {}\n".format(
-                len(subdomain_list), hostname)
-            separator = '—' * (len(message) - 1)
-            print(colored(message + separator, 'green'))
+        if not quiet:
+            if len(subdomain_list) > 0:
+                # print discovery report and a separator ('—')
+                message = "{} SAN's found from {}\n".format(
+                    len(subdomain_list), hostname)
+                separator = '—' * (len(message) - 1)
+                print(colored(message + separator, 'green'))
 
-            # print each subdomain found
-            for subject in sorted(subdomain_list):
-                print(colored('→ ', 'green') + subject)
-            print('\n', end='')
-        else:
-            print(colored("No SAN's were found.", 'white', 'on_red'))
-            print('\n', end='')
+                # print each subdomain found
+                for subject in sorted(subdomain_list):
+                    print(colored('→ ', 'green') + subject)
+                print('\n', end='')
+            else:
+                print(colored("No SAN's were found.", 'white', 'on_red'))
+                print('\n', end='')
 
 
 def collect_report(subdomain_list, hostname, port):
