@@ -8,7 +8,13 @@ layout: default
 ## Extract subdomains with GAN
 ![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub release](https://img.shields.io/github/release/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/releases) [![GitHub forks](https://img.shields.io/github/forks/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/network) [![GitHub stars](https://img.shields.io/github/stars/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/stargazers)
 
-GetAltName (or **GAN**) is a tool that **extracts sub-domains or virtual domains directly from SSL certificates** found in HTTP**S** sites. It returns a handy list of sub-domains to ease the phase of information gathering in a pen-testing assessment where you can find an interesting amount of data.
+**GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
+
+This code extract subdomain names from http**s** sites and return a list or json output of its findings. It is _**not**_ a subdomain brute-force tool, and you can [actually find those subdomains manually](https://gfycat.com/AnotherDizzyDodobird), this tools is about the automation of that process, it also offers the following features:
+* Input a **host or Nmap XML file** to scan and return subdomains.
+* **List or JSON output**, useful if you want to export data into other tools.
+* You can _optionally_ **filter out domain names** that doesn't match the domain name that you're analyzing.
+* **Copy to your clipboard** the domain names as a _list_ or _string_ if you don't want to deal with files, this is also useful for tools that doesn't accept file input.
 
 You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [Spanish - _written on November 13, 2017_].
 
@@ -50,12 +56,7 @@ optional arguments:
   -d, --debug                           Set debug enable
 ```
 
-- With **`-m`** GAN can **return a list of subdomains ending in the domain you previously specified**. For example, if you're analyzing _google.com_ you will get _youtube.com_ and other domains, if you only want subdomains belonging to _google.com_ then you can filter out those domains with **`-m`**
-- **Select a custom port with `-p`**. This is useful if the server is on another port besides 443
-- **[crt.sh](https://crt.sh/) integration with `-s`**. You can now append results of crt.sh into your extracted subdomains list.
-- **Copy to clipboard with option `-c`**. This argument gives you two options, copy the contents of the subdomain list in a _List_ with **`-c l`** or in a _single string_ style with **`-c s`**. This is useful if you need a quick way to analyze subdomain, say, with Nmap to provide a list of domains in a single string without having to load a file with **-iL**.
-
-## Screenshot
+## Example
 [![Image Example](/assets/screenshot.png)](/getaltname/assets/screenshot.png)
 
 ## Demonstration
@@ -72,6 +73,7 @@ _[You can also watch the demo here.](https://asciinema.org/a/tpebJeCEThMLDuDEXu1
 * requests
 * tldextract
 * termcolor
+* tqdm
 
 **Installation with pipenv**:
 ```sh
