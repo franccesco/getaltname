@@ -27,7 +27,6 @@ def nmap_output(report, destination):
 
 def json_format(subdomains, hostname):
     """Output JSON format."""
-    hosts = {}
     listdomains = {'count': len(subdomains), 'domains': list(subdomains)}
     return json.dumps(listdomains, indent=2, sort_keys=True)
 
