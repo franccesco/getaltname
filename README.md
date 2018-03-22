@@ -3,7 +3,7 @@
 [![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg)](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub license](https://img.shields.io/github/license/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/blob/master/LICENSE.md)
 
 
-**GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
+**GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates **directly** from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
 
 This code extract subdomain names from http**s** sites and return a list or json output of its findings. It is _**not**_ a subdomain brute-force tool, and you can [actually find those subdomains manually](https://gfycat.com/AnotherDizzyDodobird), this tools is about the automation of that process, it also offers the following features:
 * Input a **host or Nmap XML file** to scan and return subdomains.
@@ -39,6 +39,9 @@ optional arguments:
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
 
 ![Example Image](screenshot.png)
+
+# Demo
+[![asciicast](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5.png)](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)
 
 # Installation
 Required libraries:

@@ -62,8 +62,8 @@ optional arguments:
 
 ## Demonstration
 
-<script src="https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o.js" id="asciicast-tpebJeCEThMLDuDEXu1k1oz1o" async></script>
-_[You can also watch the demo here.](https://asciinema.org/a/tpebJeCEThMLDuDEXu1k1oz1o)_
+<script src="https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5.js" id="asciicast-bYYnK76AQJZFP9hj43e3CUaH5" async></script>
+_[You can also watch the demo here.](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)_
 
 ## Installation
 ### Required:
