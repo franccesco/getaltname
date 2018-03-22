@@ -6,6 +6,7 @@ from os import remove
 from modules.get_san import get_san
 from modules.crt_sh import search_crt
 from modules.report import output, report_single, collect_report
+from modules.nmap_parsing import parse_nmap
 
 
 class TestGetAltName(unittest.TestCase):
@@ -16,6 +17,7 @@ class TestGetAltName(unittest.TestCase):
         self.hostname = 'starbucks.com'
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
+        self.example_xml = 'test_nmap.xml'
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""
@@ -116,6 +118,11 @@ class TestGetAltName(unittest.TestCase):
         """Test if report return False on empty list."""
         report = collect_report([], self.hostname, self.port)
         self.assertFalse(report)
+
+    def test_nmap_parsing(self):
+        """Test if nmap XML output is parsed correctly."""
+        hosts_dict = parse_nmap(self.example_xml)
+        self.assertIsInstance(hosts_dict, dict)
 
 
 if __name__ == '__main__':
