@@ -5,7 +5,7 @@ import unittest
 from os import remove
 from modules.get_san import get_san
 from modules.crt_sh import search_crt
-from modules.report import output, json_format, report_single, collect_report
+from modules.report import output, report_single, collect_report
 
 
 class TestGetAltName(unittest.TestCase):
