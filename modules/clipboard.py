@@ -1,7 +1,8 @@
 """
-    Copy the output to clipboard as a list or single string,
-    this is a handy way of pasting your newly found subdomains
-    into other tools that does not accept file input.
+Copy the output to clipboard as a list or single string.
+
+this is a handy way of pasting your newly found subdomains
+into other tools that does not accept file input.
 """
 
 import pyperclip

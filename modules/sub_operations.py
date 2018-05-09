@@ -1,6 +1,8 @@
 """
-    List operations to aid in domain matching,
-    strip wildcards, and return a list of unique items.
+Clean subdomains extracted from certificates.
+
+List operations to aid in domain matching,
+strip wildcards, and return a list of unique items.
 """
 
 import re
@@ -8,12 +10,12 @@ from tldextract import extract
 
 
 def match_domain_only(subdomain_list, hostname):
-    """Returns a list with the specified domain only."""
+    """Return a list with the specified domain only."""
     match_list = []
     full_domain = extract(hostname)
     matching_domain = '{}.{}'.format(full_domain.domain, full_domain.suffix)
     for domain in subdomain_list:
-        pattern = '.*\.{}$'.format(matching_domain)
+        pattern = r'.*\.{}$'.format(matching_domain)
         matched_domain = re.search(pattern, domain)
         if matched_domain is None:
             continue

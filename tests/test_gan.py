@@ -17,7 +17,7 @@ class TestGetAltName(unittest.TestCase):
         self.hostname = 'starbucks.com'
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
-        self.example_xml = 'test_nmap.xml'
+        self.example_xml = 'tests/test_nmap.xml'
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""
@@ -135,7 +135,3 @@ class TestGetAltName(unittest.TestCase):
         with open('data.out', 'r') as data:
             report = json.dumps(data.read())
         self.assertTrue(json.loads(report))
-
-
-if __name__ == '__main__':
-    unittest.main()

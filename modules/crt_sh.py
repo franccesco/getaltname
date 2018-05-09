@@ -1,6 +1,4 @@
-"""
-    Parse https://crt.sh/ results to acquire more subdomains.
-"""
+"""Parse https://crt.sh/ results to acquire more subdomains."""
 
 import json
 import requests
@@ -14,8 +12,6 @@ init()
 
 def search_crt(domain, timeout=10):
     """Search subdomain on crt.sh to retrieve additional subdomains."""
-
-    # strip subdomain from request
     full_domain = extract(domain)
     domain = '{}.{}'.format(full_domain.domain, full_domain.suffix)
     subdomain_list = []
@@ -28,8 +24,6 @@ def search_crt(domain, timeout=10):
     except requests.exceptions.ReadTimeout as e:
         timeout_msg = colored('FATAL: crt.sh timed out.', 'white', 'on_red')
         print(timeout_msg, end='\n')
-
-        # explain why a timeout is needed
         print(('Sometimes crt.sh takes too long trying to process '
                'large data sets and returns a \'404\' instead. This is beyond '
                'my power to fix, try another server, you might get lucky.'))
@@ -40,7 +34,7 @@ def search_crt(domain, timeout=10):
     request_json = request_json.text.replace('}{', '},{')
     fixed_json = json.loads('[{}]'.format(request_json))
 
-    # loops through a list of dictionaries and extracts'name_value' contents
+    # loops through a list of dictionaries and extracts 'name_value' contents
     for extension_id, value in enumerate(fixed_json):
         subdomain = fixed_json[extension_id]['name_value']
         subdomain_list.append(subdomain)

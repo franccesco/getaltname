@@ -1,7 +1,8 @@
 """
 Gets Subject Alternative Names from requested host.
-    Thanks to Cato- for this piece of code:
-    https://gist.github.com/cato-/6551668
+
+Thanks to Cato- for this piece of code:
+https://gist.github.com/cato-/6551668
 """
 
 import ssl
@@ -18,6 +19,7 @@ init()
 
 
 def get_san(hostname, port, xml_parse=False, crt_sh=False, match=False):
+    """Get Subject Alternative Names from target."""
     subdomains = []
     general_names = SubjectAltName()
 

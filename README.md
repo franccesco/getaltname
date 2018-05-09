@@ -38,7 +38,7 @@ optional arguments:
 # Example
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
 
-![Example Image](screenshot.png)
+![Example Image](assets/screenshot.png)
 
 # Demo
 [![asciicast](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5.png)](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)
@@ -98,5 +98,5 @@ Contribution is welcome, just remember:
 If you like the project and would like to support me you can buy me a cup of coffee, you will also be inmortalized as a patreon, thank you 🙏
 
 <a href="https://www.paypal.me/orozcofranccesco">
-  <img height="32" src="badges/paypal.png" />
+  <img height="32" src="assets/paypal_badge.png" />
 </a> <a href="https://www.buymeacoffee.com/franccesco" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a> <a href='https://ko-fi.com/V7V8AXFE' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
