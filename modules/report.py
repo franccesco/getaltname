@@ -1,6 +1,4 @@
-"""
-    Module to report an output in JSON, HTML, and List.
-"""
+"""Module to report an output in JSON, HTML, and List."""
 
 import json
 from colorama import init
@@ -10,7 +8,7 @@ init()
 
 
 def output(subdomains, hostname, format_output, destination):
-    """Writes the subdomain list to a destination."""
+    """Write a subdomain list to a destination."""
     with open(destination, 'w') as file_object:
         if format_output == 'json':
             file_object.write('{}'.format(json_format(subdomains, hostname)))
@@ -20,7 +18,7 @@ def output(subdomains, hostname, format_output, destination):
 
 
 def nmap_output(report, destination):
-    """Outputs NMAP XML results to a json or list file."""
+    """Output NMAP XML results to a json or list file."""
     with open(destination, 'w') as file_object:
         file_object.write(str(report))
 
@@ -32,8 +30,7 @@ def json_format(subdomains, hostname):
 
 
 def report_single(subdomain_list, hostname, format, quiet=False):
-    """Reports if subdomains were found."""
-
+    """Report if subdomains were found."""
     if format == 'json':
         if not quiet:
             print(json_format(subdomain_list, hostname))
@@ -57,9 +54,11 @@ def report_single(subdomain_list, hostname, format, quiet=False):
 
 def collect_report(subdomain_list, hostname, port):
     """
-        A more specialized report for nmap parsing, it doesn't output anything
-        to stdout, it returns a report (string) for each finding, if there's
-        nothing to report, then return false.
+    Look for targets in a XML Nmap report.
+
+    A more specialized report for nmap parsing, it doesn't output anything
+    to stdout, it returns a report (string) for each finding, if there's
+    nothing to report, then return false.
     """
     if len(subdomain_list) > 0:
         message = "\n{} SAN's found from {}:{}\n".format(

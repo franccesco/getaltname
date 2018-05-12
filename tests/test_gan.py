@@ -10,14 +10,14 @@ from modules.nmap_parsing import parse_nmap
 
 
 class TestGetAltName(unittest.TestCase):
-    """Tests if GAN's modules works correctly"""
+    """Tests if GAN's modules works correctly."""
 
     def setUp(self):
         """Set up default values for tests."""
         self.hostname = 'starbucks.com'
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
-        self.example_xml = 'test_nmap.xml'
+        self.example_xml = 'tests/test_nmap.xml'
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""
@@ -28,15 +28,13 @@ class TestGetAltName(unittest.TestCase):
         """Test if get_san() exits correctly with non-existant domain."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        with self.assertRaises(SystemExit) as cm:
+        with self.assertRaises(Exception) as cm:
             get_san(hostname='123oaenf.comasd', port=443)
         sys.stdout = sys.__stdout__
         exception = cm.exception
-        self.assertEqual(exception.code, 1)
 
     def test_get_san_crt_sh_integration(self):
         """Test if get_san() returns domains from crt.sh."""
-
         subdomain_set = get_san(
             hostname=self.hostname,
             port=self.port,
@@ -135,7 +133,3 @@ class TestGetAltName(unittest.TestCase):
         with open('data.out', 'r') as data:
             report = json.dumps(data.read())
         self.assertTrue(json.loads(report))
-
-
-if __name__ == '__main__':
-    unittest.main()

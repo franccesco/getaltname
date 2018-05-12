@@ -14,12 +14,15 @@ pyperclip = "*"
 tldextract = "*"
 termcolor = "*"
 tqdm = "*"
+flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 pudb = "*"
 "flake8" = "*"
 coverage = "*"
 python-coveralls = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.6"
