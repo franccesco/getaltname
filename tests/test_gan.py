@@ -10,7 +10,7 @@ from modules.nmap_parsing import parse_nmap
 
 
 class TestGetAltName(unittest.TestCase):
-    """Tests if GAN's modules works correctly"""
+    """Tests if GAN's modules works correctly."""
 
     def setUp(self):
         """Set up default values for tests."""
@@ -28,15 +28,13 @@ class TestGetAltName(unittest.TestCase):
         """Test if get_san() exits correctly with non-existant domain."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        with self.assertRaises(SystemExit) as cm:
+        with self.assertRaises(Exception) as cm:
             get_san(hostname='123oaenf.comasd', port=443)
         sys.stdout = sys.__stdout__
         exception = cm.exception
-        self.assertEqual(exception.code, 1)
 
     def test_get_san_crt_sh_integration(self):
         """Test if get_san() returns domains from crt.sh."""
-
         subdomain_set = get_san(
             hostname=self.hostname,
             port=self.port,
