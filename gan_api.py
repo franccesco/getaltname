@@ -14,7 +14,10 @@ def index():
 @app.route('/<string:host>')
 def return_san(host):
     """Return a JSON string with SANS's found."""
-    sans = get_san(host, 443)
+    try:
+        sans = get_san(host, 443)
+    except Exception as e:
+        return jsonify({'err': 'Unable to connect.'})
     json_sans = {'count': len(sans), 'domains': list(sans)}
     return jsonify(json_sans)
 

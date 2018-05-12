@@ -30,8 +30,8 @@ def get_san(hostname, port, xml_parse=False, crt_sh=False, match=False):
         if xml_parse:
             return []
         err = colored('FATAL: Could not connect to server.', 'white', 'on_red')
-        print(err, end='\n\n')
-        exit(1)
+        e.strerror = err
+        raise e
 
     # requesting certificate
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
