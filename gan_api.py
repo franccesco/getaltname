@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     """Return index page."""
-    return "Hello World!"
+    return "<center><h1>It works!</h1></center>"
 
 
 @app.route('/<string:host>')
