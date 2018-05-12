@@ -15,6 +15,7 @@ tldextract = "*"
 termcolor = "*"
 tqdm = "*"
 flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 pudb = "*"
