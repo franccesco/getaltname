@@ -97,12 +97,14 @@ if not isfile(args.hostname):
         output(sans, args.hostname, args.format, args.output)
 
 else:
+    print(colored('Scanning hosts from Nmap XML output', 'yellow'))
     hosts = parse_nmap(args.hostname)
 
     # if no hosts are found in XML then exits
     if not any(hosts):
-        message = 'No hosts found in {}'.format(args.hostname)
+        message = f'No hosts found in {args.hostname}'
         print(colored(message, 'white', 'on_red'))
+        print('Use -sV (service scan) flag in Nmap to detect https services.')
         exit()
 
     full_report = []
