@@ -14,9 +14,9 @@ after_success:
   - ./getaltname.py starbucks.com -s 10
   - ./getaltname.py facebook.com -f json
   - ./getaltname.py microsoft.com -o data.out -f json -q
-  - ./getaltname.py test_nmap.xml
-  - ./getaltname.py test_nmap.xml -o data.out -q
-  - ./getaltname.py test_nmap.xml -f json
-  - ./getaltname.py test_nmap.xml -f json -q
+  - ./getaltname.py tests/test_nmap.xml
+  - ./getaltname.py tests/test_nmap.xml -o data.out -q
+  - ./getaltname.py tests/test_nmap.xml -f json
+  - ./getaltname.py tests/test_nmap.xml -f json -q
 after_script:
   - coveralls
