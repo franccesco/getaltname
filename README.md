@@ -6,7 +6,7 @@
 **GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates **directly** from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
 
 This code extract subdomain names from http**s** sites and return a list or json output of its findings. It is _**not**_ a subdomain brute-force tool, and you can [actually find those subdomains manually](https://gfycat.com/AnotherDizzyDodobird), this tools is about the automation of that process, it also offers the following features:
-* Input a **host or Nmap XML file** to scan and return subdomains.
+* Input a **host or Nmap XML file** to scan and return subdomains. (Make sure to trigger the -sV flag in Nmap!)
 * **List or JSON output**, useful if you want to export data into other tools.
 * You can _optionally_ **filter out domain names** that doesn't match the domain name that you're analyzing.
 * **Copy to your clipboard** the domain names as a _list_ or _string_ if you don't want to deal with files, this is also useful for tools that doesn't accept file input.
