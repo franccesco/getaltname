@@ -1,6 +1,5 @@
 """GetAltName Web API."""
 from modules import get_san
-from modules import json_format
 from flask import Flask, jsonify
 app = Flask(__name__)
 

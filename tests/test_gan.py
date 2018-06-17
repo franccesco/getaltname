@@ -28,10 +28,9 @@ class TestGetAltName(unittest.TestCase):
         """Test if get_san() exits correctly with non-existant domain."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        with self.assertRaises(Exception) as cm:
+        with self.assertRaises(Exception):
             get_san(hostname='123oaenf.comasd', port=443)
         sys.stdout = sys.__stdout__
-        exception = cm.exception
 
     def test_get_san_crt_sh_integration(self):
         """Test if get_san() returns domains from crt.sh."""
