@@ -16,6 +16,7 @@ termcolor = "*"
 tqdm = "*"
 flask = "*"
 gunicorn = "*"
+click = "*"
 
 [dev-packages]
 pudb = "*"

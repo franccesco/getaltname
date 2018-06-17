@@ -35,6 +35,24 @@ optional arguments:
   -V, --version                         Print version information.
 ```
 
+# GAN API (In development)
+A simple web API made in Flask that scans a host and returns the subdomains in a JSON string format, to use it just activate the API either with Flask or with Gunicorn:
+
+```bash
+$ pipenv run python gan_api.py
+```
+and go to `http://yoursite/site_to_scan.com`.
+
+**This API is still in Alpha stage.** You can also **deploy your GAN API** to Heroku:
+```bash
+$ Heroku create optional_app_name
+$ git push heroku master
+```
+And go to http://optional_app_name.herokuapp.com/google.com
+Example: http://ganproject.herokuapp.com/google.com
+
+**Beware, this feature is still in development and is not production ready!.**
+
 # Example
 In this case the tool give you sub-domains that you probably didn't find with a sub-domain brute force tool.
 
@@ -52,6 +70,8 @@ Required libraries:
 * tldextract
 * termcolor
 * tqdm
+* gunicorn
+* Flask
 
 **Installation with pipenv**:
 ```sh
