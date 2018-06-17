@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     """Return index page."""
-    return "<center><h1>It works!</h1></center>"
+    return 'Usage: http://127.0.0.1/host_to_scan'
 
 
 @app.route('/<string:host>')
