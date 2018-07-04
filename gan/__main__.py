@@ -37,10 +37,11 @@ from os.path import isfile
 from termcolor import colored
 
 # GAN Modules
-from modules.get_san import get_san
-from modules.nmap_parsing import parse_nmap
-from modules.clipboard import clipboard_output
-from modules.report import output, report_single, collect_report, nmap_output
+from gan.get_san import get_san
+from gan.nmap_parsing import parse_nmap
+from gan.clipboard import clipboard_output
+from gan.report import output, report_single, collect_report, nmap_output
+
 
 # starting Colorama
 init()

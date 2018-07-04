@@ -3,10 +3,10 @@ import sys
 import json
 import unittest
 from os import remove
-from modules.get_san import get_san
-from modules.crt_sh import search_crt
-from modules.report import output, report_single, collect_report, nmap_output
-from modules.nmap_parsing import parse_nmap
+from gan.get_san import get_san
+from gan.crt_sh import search_crt
+from gan.report import output, report_single, collect_report, nmap_output
+from gan.nmap_parsing import parse_nmap
 
 
 class TestGetAltName(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestGetAltName(unittest.TestCase):
         self.hostname = 'starbucks.com'
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
-        self.example_xml = 'tests/test_nmap.xml'
+        self.example_xml = 'gan/tests/test_nmap.xml'
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""

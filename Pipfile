@@ -15,15 +15,14 @@ tldextract = "*"
 termcolor = "*"
 tqdm = "*"
 flask = "*"
-gunicorn = "*"
-click = "*"
 
 [dev-packages]
 pudb = "*"
 "flake8" = "*"
-coverage = "*"
 python-coveralls = "*"
 pylint = "*"
+setuptools = "*"
+wheel = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
