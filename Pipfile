@@ -23,6 +23,8 @@ python-coveralls = "*"
 pylint = "*"
 setuptools = "*"
 wheel = "*"
+twine = "*"
+keyring = "*"
 
 [requires]
 python_version = "3.7"
