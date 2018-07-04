@@ -19,4 +19,4 @@ after_success:
   - pipenv run python -m gan gan/tests/test_nmap.xml -f json
   - pipenv run python -m gan gan/tests/test_nmap.xml -f json -q
 after_script:
-  - coveralls
+  - pipenv run coveralls
