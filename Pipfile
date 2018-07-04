@@ -1,29 +1,19 @@
 [[source]]
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
 colorama = "*"
-cryptography = "*"
+pyperclip = "*"
+termcolor = "*"
+tldextract = "*"
+tqdm = "*"
 pyopenssl = "*"
 "pyasn1" = "*"
 ndg-httpsclient = "*"
-pyperclip = "*"
-tldextract = "*"
-termcolor = "*"
-tqdm = "*"
 
 [dev-packages]
-pudb = "*"
-"flake8" = "*"
-python-coveralls = "*"
-pylint = "*"
-setuptools = "*"
-wheel = "*"
-twine = "*"
-keyring = "*"
 
 [requires]
 python_version = "3.7"
