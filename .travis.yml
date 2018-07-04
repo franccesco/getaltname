@@ -8,15 +8,15 @@ install:
 script:
   - pipenv run coverage run -m unittest discover gan/tests/ -f
 after_success:
-  - gan google.com
-  - gan google.com -m
-  - gan google.com -f json -o data.out -q
-  - gan starbucks.com -s 10
-  - gan facebook.com -f json
-  - gan microsoft.com -o data.out -f json -q
-  - gan gan/tests/test_nmap.xml
-  - gan gan/tests/test_nmap.xml -o data.out -q
-  - gan gan/tests/test_nmap.xml -f json
-  - gan gan/tests/test_nmap.xml -f json -q
+  - pipenv run python -m gan google.com
+  - pipenv run python -m gan google.com -m
+  - pipenv run python -m gan google.com -f json -o data.out -q
+  - pipenv run python -m gan starbucks.com -s 10
+  - pipenv run python -m gan facebook.com -f json
+  - pipenv run python -m gan microsoft.com -o data.out -f json -q
+  - pipenv run python -m gan gan/tests/test_nmap.xml
+  - pipenv run python -m gan gan/tests/test_nmap.xml -o data.out -q
+  - pipenv run python -m gan gan/tests/test_nmap.xml -f json
+  - pipenv run python -m gan gan/tests/test_nmap.xml -f json -q
 after_script:
   - coveralls
