@@ -21,11 +21,12 @@ setuptools.setup(
         'tqdm',
         'pyopenssl',
         'pyasn1',
-        'ndg-httpsclient'
+        'ndg-httpsclient',
     ],
     entry_points={
         'console_scripts': [
-            'gan = gan.__main__:main'
+            'gan = gan.__main__:main',
+            'gan_api = gan.api:app'
         ],
     },
     classifiers=[
