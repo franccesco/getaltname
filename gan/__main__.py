@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # Author: Franccesco Orozco.
-# Version: 2.0.0
 # This program extracts Subject Alternative Names from SSL Certificates.
 # It can disclose virtual names (subdomains) that the server has... so stop
 # doing so many dns brute force for the love of god.
@@ -37,10 +36,11 @@ from os.path import isfile
 from termcolor import colored
 
 # GAN Modules
-from modules.get_san import get_san
-from modules.nmap_parsing import parse_nmap
-from modules.clipboard import clipboard_output
-from modules.report import output, report_single, collect_report, nmap_output
+from gan.get_san import get_san
+from gan.nmap_parsing import parse_nmap
+from gan.clipboard import clipboard_output
+from gan.report import output, report_single, collect_report, nmap_output
+
 
 # starting Colorama
 init()
@@ -69,7 +69,7 @@ parser.add_argument('-c', '--clipboard',
 parser.add_argument('-d', '--debug',
                     help='Set debug enable', action='store_true')
 parser.add_argument('-V', '--version', action='version',
-                    help='Print version information.', version='2.0.0')
+                    help='Print version information.', version='3.0.0')
 args = parser.parse_args()
 
 

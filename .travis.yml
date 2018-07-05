@@ -1,22 +1,35 @@
 language: python
 python:
   - '3.6'
+before_install:
+  - pip install pipenv
 install:
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
-script:
-  - flake8 .
-  - coverage run -m unittest discover tests/ -f
-after_success:
-  - ./getaltname.py google.com
-  - ./getaltname.py google.com -m
-  - ./getaltname.py google.com -f json -o data.out -q
-  - ./getaltname.py starbucks.com -s 10
-  - ./getaltname.py facebook.com -f json
-  - ./getaltname.py microsoft.com -o data.out -f json -q
-  - ./getaltname.py tests/test_nmap.xml
-  - ./getaltname.py tests/test_nmap.xml -o data.out -q
-  - ./getaltname.py tests/test_nmap.xml -f json
-  - ./getaltname.py tests/test_nmap.xml -f json -q
-after_script:
-  - coveralls
+  - pipenv install -d
+jobs:
+  include:
+    - stage: test
+      script:
+        - pipenv run coverage run -m unittest discover gan/tests/ -f
+      after_success:
+        - pipenv run python -m gan google.com
+        - pipenv run python -m gan google.com -m
+        - pipenv run python -m gan google.com -f json -o data.out -q
+        - pipenv run python -m gan starbucks.com -s 10
+        - pipenv run python -m gan facebook.com -f json
+        - pipenv run python -m gan microsoft.com -o data.out -f json -q
+        - pipenv run python -m gan gan/tests/test_nmap.xml
+        - pipenv run python -m gan gan/tests/test_nmap.xml -o data.out -q
+        - pipenv run python -m gan gan/tests/test_nmap.xml -f json
+        - pipenv run python -m gan gan/tests/test_nmap.xml -f json -q
+      after_script:
+        - pipenv run coveralls
+      - stage: deploy
+      script: skip
+      deploy:
+        provider: pypi
+        user: "franccesco"
+        password:
+          secure: "gPJPRbZ/pqsEV4y1j1BY7Yyv6zjIrKjTa3sY7YaB4p3WgGTWVjKgcKWHObBW4rw8Mm/dW5pCUhZBN7QIXtdvOdQMa016ENt3q7BCeWEbXCB1+4vjAn+AFG19dlvyxPq/vhAZc5L7+UGoMX4bhlIb9Xg1K5R8dTzRGX0sGBAxvsUnhNbJHQUKnRhsPOBCMGOcIScKyfHzL4ZAY3OQIxtd2TW1mDI8uln1sAU30Nmsh4CuHZpe2uxZa2TmJd0cl54ofhAw+D/AWz8J5p2FMnyzEPA16xHPyfUEmTFqD/5QJ+UyzjWg1YTG1HFRCZR9TRZ8f7KMjTKJX6cutyYANPPnMzIYj2T5OiNAJY9VNM9JO+QFgMr+YIPkqliWM7W7DbYmIvwqevwtBn4/5CrhI9I1VqGhADpVLH8R5kJN2i3D1ZTWzXRFFrhgjk2lIx0D0/RU0KlFlwLYPtlfMNXVMlTx7Dc89o+zgzpxkVS+Jgaj5HWiNO0TCOZgXFHqFyv0hcCFG/gSrjVLUknBZNlVwWNLfHphyKiZmqOrIzHndMEymSnZNZp9iTi1CTcHnaygCw6VbJXljFwGxUl9mOIhNJqbah2m4WBBTNfyPezV/SppRD3/PkKD0G3MhrbHZGOA6Zl5DTUURLoM1F2Hg9Zsrfao/jL4/iFB/AnBCLXSA8EFGmk="
+        on:
+          tags: true
+          branch: master
