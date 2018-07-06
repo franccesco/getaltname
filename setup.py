@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='gsan',
-    version='3.0.0',
+    version='3.0.2',
     author='Franccesco Orozco',
     author_email='franccesco@codingdose.info',
     description='Extract subdomains from HTTPS sites',

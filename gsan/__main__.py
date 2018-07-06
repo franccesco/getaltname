@@ -84,7 +84,7 @@ def main():
     parser.add_argument('-d', '--debug',
                         help='Set debug enable', action='store_true')
     parser.add_argument('-V', '--version', action='version',
-                        help='Print version information.', version='3.0.0')
+                        help='Print version information.', version='3.0.2')
     args = parser.parse_args()
 
     """
