@@ -11,8 +11,8 @@ from colorama import init
 from termcolor import colored
 from pyasn1.codec.der import decoder
 from ndg.httpsclient.subj_alt_name import SubjectAltName
-from gan.sub_operations import clean_san_list
-from gan.crt_sh import search_crt
+from gsan.sub_operations import clean_san_list
+from gsan.crt_sh import search_crt
 
 # starting Colorama
 init()

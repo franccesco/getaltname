@@ -4,8 +4,8 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='gan',
-    version='2.2.1',
+    name='gsan',
+    version='3.0.0',
     author='Franccesco Orozco',
     author_email='franccesco@codingdose.info',
     description='Extract subdomains from HTTPS sites',
@@ -25,8 +25,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'gan = gan.__main__:main',
-            'gan_api = gan.api:app'
+            'gsan = gsan.__main__:main',
         ],
     },
     classifiers=[
