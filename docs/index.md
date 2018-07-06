@@ -69,8 +69,8 @@ optional arguments:
 ## Example
 [![Image Example](/assets/screenshot.png)](/getaltname/assets/screenshot.png)
 
-## Demonstration
-
+## Demo
+*Disclaimer: The tool was renamed from getaltname to GSAN.*
 <script src="https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5.js" id="asciicast-bYYnK76AQJZFP9hj43e3CUaH5" async></script>
 _[You can also watch the demo here.](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)_
 
