@@ -31,14 +31,23 @@ You can read more about how to do this _manually_ from my blog post on [getroot.
 - [x] Unit Tests
 
 # What's on the road
-- [ ] Multithreading
 - [ ] [Ideas/suggestions are very welcome.](https://github.com/franccesco/getaltname/issues)
 
 ## Usage:
 ```
-usage: getaltname.py [-h] [-p PORT] [-s [timeout]] [-m] [-q] [-o OUTPUT]
-                     [-f {json,text}] [-c {l,s}] [-d] [-V]
-                     hostname
+
+     ██████╗    ███████╗    █████╗    ███╗   ██╗
+    ██╔════╝    ██╔════╝   ██╔══██╗   ████╗  ██║
+    ██║  ███╗   ███████╗   ███████║   ██╔██╗ ██║
+    ██║   ██║   ╚════██║   ██╔══██║   ██║╚██╗██║
+    ╚██████╔╝██╗███████║██╗██║  ██║██╗██║ ╚████║
+     ╚═════╝ ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
+
+       Get - Subjective - Alternative - Names
+
+usage: gsan [-h] [-p PORT] [-s [timeout]] [-m] [-q] [-o OUTPUT]
+                   [-f {json,text}] [-c {l,s}] [-d] [-V]
+                   hostname
 
 positional arguments:
   hostname                              Host or Nmap XML to analyze.
@@ -47,7 +56,7 @@ optional arguments:
   -h, --help                            show this help message and exit
   -p PORT, --port PORT                  Destiny port (default 443)
   -s [timeout], --search-crt [timeout]  Retrieve subdomains found in crt.sh
-  -m, --match-domain                    Show match domain name only
+  -m, --match-domain                    Matching domain names only
   -q, --quiet                           Supress output.
   -o OUTPUT, --output OUTPUT            Set output filename
   -f {json,text}, --format {json,text}  Set output format
@@ -66,26 +75,8 @@ optional arguments:
 _[You can also watch the demo here.](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)_
 
 ## Installation
-### Required:
-* **python3**
-* colorama
-* ndg-httpsclient
-* pyperclip
-* requests
-* tldextract
-* termcolor
-* tqdm
-
-**Installation with pipenv**:
-```sh
-$ git clone https://github.com/franccesco/getaltname.git
-$ pipenv install
-```
-
-**Installation with Pip:**
-```sh
-$ git clone https://github.com/franccesco/getaltname.git
-$ pip install -r requirements.txt
+```bash
+$ pip install --user gan
 ```
 
 ## Troubleshooting

@@ -3,21 +3,21 @@ import sys
 import json
 import unittest
 from os import remove
-from gan.get_san import get_san
-from gan.crt_sh import search_crt
-from gan.report import output, report_single, collect_report, nmap_output
-from gan.nmap_parsing import parse_nmap
+from gsan.get_san import get_san
+from gsan.crt_sh import search_crt
+from gsan.report import output, report_single, collect_report, nmap_output
+from gsan.nmap_parsing import parse_nmap
 
 
 class TestGetAltName(unittest.TestCase):
-    """Tests if GAN's modules works correctly."""
+    """Tests if GSAN's modules works correctly."""
 
     def setUp(self):
         """Set up default values for tests."""
         self.hostname = 'starbucks.com'
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
-        self.example_xml = 'gan/tests/test_nmap.xml'
+        self.example_xml = 'gsan/tests/test_nmap.xml'
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""
