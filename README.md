@@ -52,7 +52,6 @@ In this case the tool give you sub-domains that you probably didn't find with a 
 ![Example Image](assets/screenshot.png)
 
 # Demo
-TODO
 [![asciicast](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5.png)](https://asciinema.org/a/bYYnK76AQJZFP9hj43e3CUaH5)
 
 # Installation
