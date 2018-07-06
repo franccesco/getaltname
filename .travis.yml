@@ -31,8 +31,8 @@ deploy:
 after_deploy:
   - pip install gsan
   - gsan -V
-  - gsan starbucks -m
-  - gsan starbucks -m -s
-  - gsan starbucks -m -s -f json
-  - gsan starbucks -m -f json
-  - gsan starbucks -m -q -o data.out -f json
+  - gsan starbucks.com -m
+  - gsan starbucks.com -m -s
+  - gsan starbucks.com -m -s -f json
+  - gsan starbucks.com -m -f json
+  - gsan starbucks.com -m -q -o data.out -f json
