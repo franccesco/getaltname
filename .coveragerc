@@ -5,6 +5,6 @@ source =
 # doesn't handle too well unittests and
 # clipboard.py have a lot of issues with travis-ci
 omit =
-    test*
-    getaltname.py
-    modules/clipboard.py
+    gsan/tests/*
+    gsan/__main__.py
+    gsan/modules/clipboard.py
