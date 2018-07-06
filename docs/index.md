@@ -5,18 +5,20 @@
 layout: default
 ---
 
-## Extract subdomains with GAN
+## Extract subdomains with GSAN
 ![Python Version](https://img.shields.io/badge/PyVersion-3.6-brightgreen.svg) [![Build Status](https://travis-ci.org/franccesco/getaltname.svg?branch=master)](https://travis-ci.org/franccesco/getaltname) [![Coverage Status](https://coveralls.io/repos/github/franccesco/getaltname/badge.svg?branch=master)](https://coveralls.io/github/franccesco/getaltname?branch=master) [![GitHub release](https://img.shields.io/github/release/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/releases) [![GitHub forks](https://img.shields.io/github/forks/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/network) [![GitHub stars](https://img.shields.io/github/stars/franccesco/getaltname.svg)](https://github.com/franccesco/getaltname/stargazers)
 
-**GetAltName** (or **GAN**) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
+**GSAN** (**G**et **S**ubject **A**lternative **N**ames) is a tool that can extract [Subject Alternative Names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) found in SSL Certificates directly from **HTTPS** web sites which can provide you with DNS names (subdomains) or virtual servers.
 
 This code extract subdomain names from http**s** sites and return a list or json output of its findings. It is _**not**_ a subdomain brute-force tool, and you can [actually find those subdomains manually](https://gfycat.com/AnotherDizzyDodobird), this tools is about the automation of that process, it also offers the following features:
-* Input a **host or Nmap XML file** to scan and return subdomains.
+* Input a single **host or Nmap XML file** to scan and return subdomains.
 * **List or JSON output**, useful if you want to export data into other tools.
 * You can _optionally_ **filter out domain names** that doesn't match the domain name that you're analyzing.
+* **Integration with crt.sh** so you can extract more subdomains from certificates of the same entity.
+* Also works with **Self-signed** certificates.
 * **Copy to your clipboard** the domain names as a _list_ or _string_ if you don't want to deal with files, this is also useful for tools that doesn't accept file input.
 
-You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [Spanish - _written on November 13, 2017_].
+You can read more about how to do this _manually_ from my blog post on [getroot.info](https://getroot.info/tip-getaltname/) [in Spanish - _written on November 13, 2017_].
 
 # Features
 - [x] File output
