@@ -106,7 +106,7 @@ class TestGetAltName(unittest.TestCase):
         report_single([], '', 'text')
         sys.stdout = sys.__stdout__
         message = banner + "\n\x1b[41m\x1b[37mNo SAN's were found.\x1b[0m\n\n"
-        self.assertEqual(captured_text.getvalue(), err_message)
+        self.assertEqual(captured_text.getvalue(), message)
 
     def test_collect_report(self):
         """Test nmap report method collect_report()."""
