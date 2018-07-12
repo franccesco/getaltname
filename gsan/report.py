@@ -1,6 +1,7 @@
 """Module to report an output in JSON, HTML, and List."""
 
 import json
+from .banner import banner
 from colorama import init
 from termcolor import colored
 # starting Colorama
@@ -33,9 +34,11 @@ def report_single(subdomain_list, hostname, format, quiet=False):
     """Report if subdomains were found."""
     if format == 'json':
         if not quiet:
+            print(banner)
             print(json_format(subdomain_list, hostname))
     else:
         if not quiet:
+            print(banner)
             if len(subdomain_list) > 0:
                 # print discovery report and a separator ('—')
                 message = "{} SAN's found from {}\n".format(

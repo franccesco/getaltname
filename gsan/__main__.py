@@ -36,6 +36,8 @@ from os.path import isfile
 from termcolor import colored
 
 # GSAN Modules
+from .version import version
+from .banner import banner_usage
 from gsan.get_san import get_san
 from gsan.nmap_parsing import parse_nmap
 from gsan.clipboard import clipboard_output
@@ -44,25 +46,14 @@ from gsan.report import output, report_single, collect_report, nmap_output
 
 def main():
     """Command Line Interface."""
-    banner = r'''
-     ██████╗    ███████╗    █████╗    ███╗   ██╗
-    ██╔════╝    ██╔════╝   ██╔══██╗   ████╗  ██║
-    ██║  ███╗   ███████╗   ███████║   ██╔██╗ ██║
-    ██║   ██║   ╚════██║   ██╔══██║   ██║╚██╗██║
-    ╚██████╔╝██╗███████║██╗██║  ██║██╗██║ ╚████║
-     ╚═════╝ ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
-
-       Get - Subjective - Alternative - Names
-    '''
-    print(banner)
-
     # starting Colorama
     init()
 
     # CLI argumentation
     parser = argparse.ArgumentParser(
         formatter_class=lambda
-        prog: argparse.HelpFormatter(prog, max_help_position=100))
+        prog: argparse.HelpFormatter(prog, max_help_position=100),
+        usage=banner_usage)
     parser.add_argument('hostname', type=str,
                         help='Host or Nmap XML to analyze.')
     parser.add_argument('-p', '--port', type=int,
@@ -84,7 +75,7 @@ def main():
     parser.add_argument('-d', '--debug',
                         help='Set debug enable', action='store_true')
     parser.add_argument('-V', '--version', action='version',
-                        help='Print version information.', version='3.0.3')
+                        help='Print version information.', version=version)
     args = parser.parse_args()
 
     """

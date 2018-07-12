@@ -1,3 +1,4 @@
+from .gsan.version import version
 import setuptools
 
 with open('README.md', 'r') as fh:
@@ -5,7 +6,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='gsan',
-    version='3.0.3',
+    version=version,
     author='Franccesco Orozco',
     author_email='franccesco@codingdose.info',
     description='Extract subdomains from HTTPS sites',
