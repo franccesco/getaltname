@@ -12,6 +12,7 @@ tqdm = "*"
 pyopenssl = "*"
 "pyasn1" = "*"
 ndg-httpsclient = "*"
+gsan = {editable = true, path = "."}
 
 [dev-packages]
 coverage = "*"
