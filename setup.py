@@ -1,4 +1,4 @@
-from .gsan.version import version
+from gsan.version import version
 import setuptools
 
 with open('README.md', 'r') as fh:

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ebfd5bf7dfa49992cd71a9d97ea614c3a05e39e8488b20af8cd50ae97664cf36"
+            "sha256": "28422ecbeb7a8c9d55e623176d7adb3f79745c9de2f30b24ac34c6e32d2bfb57"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -107,7 +107,7 @@
             ],
             "version": "==2.2.2"
         },
-        "gsan": {
+        "e1839a8": {
             "editable": true,
             "path": "."
         },
