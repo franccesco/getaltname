@@ -3,6 +3,7 @@ import sys
 import json
 import unittest
 from os import remove
+from gsan.banner import banner
 from gsan.get_san import get_san
 from gsan.crt_sh import search_crt
 from gsan.report import output, report_single, collect_report, nmap_output
@@ -99,12 +100,12 @@ class TestGetAltName(unittest.TestCase):
         self.assertTrue(json.loads(json_data))
 
     def test_report_no_sans_found(self):
-        """Test if 'no sounds found' message its displayed correctly."""
+        """Test if 'no sans found' message its displayed correctly."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
         report_single([], '', 'text')
         sys.stdout = sys.__stdout__
-        err_message = "\x1b[41m\x1b[37mNo SAN's were found.\x1b[0m\n\n"
+        message = banner + "\n\x1b[41m\x1b[37mNo SAN's were found.\x1b[0m\n\n"
         self.assertEqual(captured_text.getvalue(), err_message)
 
     def test_collect_report(self):
