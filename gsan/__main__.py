@@ -36,6 +36,7 @@ from os.path import isfile
 from termcolor import colored
 
 # GSAN Modules
+from .version import version
 from .banner import banner_usage
 from gsan.get_san import get_san
 from gsan.nmap_parsing import parse_nmap
@@ -74,7 +75,7 @@ def main():
     parser.add_argument('-d', '--debug',
                         help='Set debug enable', action='store_true')
     parser.add_argument('-V', '--version', action='version',
-                        help='Print version information.', version='3.0.3')
+                        help='Print version information.', version=version)
     args = parser.parse_args()
 
     """
