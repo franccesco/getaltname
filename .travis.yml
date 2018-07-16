@@ -1,5 +1,7 @@
 language: python
 python:
+  - '3.4'
+  - '3.5'
   - '3.6'
 before_install:
   - pip install pipenv
@@ -29,6 +31,7 @@ deploy:
     tags: true
     branch: master
 after_deploy:
+  - deactivate
   - pip install gsan
   - gsan -V
   - gsan starbucks.com -m
