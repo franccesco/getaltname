@@ -17,6 +17,3 @@ ndg-httpsclient = "*"
 [dev-packages]
 coverage = "*"
 coveralls = "*"
-
-[requires]
-python_version = "3.7"
