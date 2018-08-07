@@ -57,7 +57,7 @@ def get_san(hostname, port, xml_parse=False, crt_sh=False, match=False):
 
     # merge list results from crt.sh if found.
     if crt_sh:
-        crt_subdomains = search_crt(hostname)
+        crt_subdomains = search_crt(hostname, crt_sh)
         if crt_subdomains is not False:
             subdomains = list(subdomains) + list(crt_subdomains)
 
