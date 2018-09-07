@@ -6,7 +6,7 @@ banner = r'''
 ╚██████╔╝██╗███████║██╗██║  ██║██╗██║ ╚████║
  ╚═════╝ ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
 
-   Get - Subjective - Alternative - Names
+   Get - Subject - Alternative - Names
 '''
 
 banner_usage = r'''gsan [-h] [-p PORT] [-s [timeout]] [-m] [-q] [-o OUTPUT]
@@ -20,5 +20,5 @@ banner_usage = r'''gsan [-h] [-p PORT] [-s [timeout]] [-m] [-q] [-o OUTPUT]
         ╚██████╔╝██╗███████║██╗██║  ██║██╗██║ ╚████║
          ╚═════╝ ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
 
-           Get - Subjective - Alternative - Names
+           Get - Subject - Alternative - Names
 '''
