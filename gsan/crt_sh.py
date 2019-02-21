@@ -32,7 +32,7 @@ def search_crt(domain, timeout=10):
     # crt.sh has JSON output currently broken, replacing endings like "}{"
     # with "},{" and enclosing the whole JSON in "[]" seems to fix it.
     request_json = request_json.text.replace('}{', '},{')
-    fixed_json = json.loads('[{}]'.format(request_json))
+    fixed_json = json.loads(request_json)
 
     # loops through a list of dictionaries and extracts 'name_value' contents
     for extension_id, value in enumerate(fixed_json):
