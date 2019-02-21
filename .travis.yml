@@ -15,7 +15,7 @@ after_success:
 - pipenv run python -m gsan google.com -f json -o data.out -q
 # - pipenv run python -m gsan starbucks.com -s 60
 - pipenv run python -m gsan facebook.com -f json
-- pipenv run python -m gsan microsoft.com -o data.out -f json -q
+- pipenv run python -m gsan www.microsoft.com -o data.out -f json -q
 - pipenv run python -m gsan gsan/tests/test_nmap.xml
 - pipenv run python -m gsan gsan/tests/test_nmap.xml -o data.out -q
 - pipenv run python -m gsan gsan/tests/test_nmap.xml -f json
