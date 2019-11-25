@@ -15,10 +15,10 @@ class TestGetAltName(unittest.TestCase):
 
     def setUp(self):
         """Set up default values for tests."""
-        self.hostname = 'starbucks.com'
+        self.hostname = "starbucks.com"
         self.port = 443
         self.subdomain_set = get_san(self.hostname, self.port)
-        self.example_xml = 'gsan/tests/test_nmap.xml'
+        self.example_xml = "gsan/tests/test_nmap.xml"
 
     def test_get_san_single_host(self):
         """Test get_san() when invoked with a single host and port."""
@@ -30,7 +30,7 @@ class TestGetAltName(unittest.TestCase):
         captured_text = io.StringIO()
         sys.stdout = captured_text
         with self.assertRaises(Exception):
-            get_san(hostname='123oaenf.comasd', port=443)
+            get_san(hostname="123oaenf.comasd", port=443)
         sys.stdout = sys.__stdout__
 
     # disabling this test until crt_sh gets fixed.
@@ -48,8 +48,7 @@ class TestGetAltName(unittest.TestCase):
 
     def test_get_san_return_empty_list(self):
         """Returns empty list if host from Nmap XML returned no SAN's."""
-        subdomain_set = get_san(hostname='123oaenf.comasd',
-                                port=self.port, xml_parse=True)
+        subdomain_set = get_san(hostname="123oaenf.comasd", port=self.port, xml_parse=True)
         self.assertIsInstance(subdomain_set, list)
 
     # def test_crt_sh_timeout(self):
@@ -65,37 +64,34 @@ class TestGetAltName(unittest.TestCase):
 
     def test_subdomain_output(self):
         """Test if subdomain list is output correctly."""
-        output(subdomains=self.subdomain_set,
-               format_output='text', destination='data.out',
-               hostname=self.hostname)
-        with open('data.out', 'r') as raw_data:
+        output(subdomains=self.subdomain_set, format_output="text", destination="data.out", hostname=self.hostname)
+        with open("data.out", "r") as raw_data:
             subdomains_output = raw_data.read()
             # strip last '\n' from loaded file
             subdomains_output = subdomains_output[:-1]
 
-        self.assertEqual(subdomains_output, '\n'.join(
-            map(str, list(self.subdomain_set))))
-        remove('data.out')
+        self.assertEqual(subdomains_output, "\n".join(map(str, list(self.subdomain_set))))
+        remove("data.out")
 
     def test_subdomain_output_json(self):
         """Test if subdomain output is in JSON."""
-        output('', self.subdomain_set, 'json', 'data.out')
-        with open('data.out', 'r') as json_data:
+        output("", self.subdomain_set, "json", "data.out")
+        with open("data.out", "r") as json_data:
             self.assertTrue(json.load(json_data))
-        remove('data.out')
+        remove("data.out")
 
     def test_subdomain_report(self):
         """Test if list output is correct."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        report_single(self.subdomain_set, self.hostname, 'text')
+        report_single(self.subdomain_set, self.hostname, "text")
         sys.stdout = sys.__stdout__
 
     def test_subdomain_report_json(self):
         """Validates JSON output to stdout."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        report_single(self.subdomain_set, self.hostname, 'json')
+        report_single(self.subdomain_set, self.hostname, "json")
         sys.stdout = sys.__stdout__
         json_data = json.dumps(captured_text.getvalue())
         self.assertTrue(json.loads(json_data))
@@ -104,15 +100,14 @@ class TestGetAltName(unittest.TestCase):
         """Test if 'no sans found' message its displayed correctly."""
         captured_text = io.StringIO()
         sys.stdout = captured_text
-        report_single([], '', 'text')
+        report_single([], "", "text")
         sys.stdout = sys.__stdout__
         message = banner + "\n\x1b[41m\x1b[37mNo SAN's were found.\x1b[0m\n\n"
         self.assertEqual(captured_text.getvalue(), message)
 
     def test_collect_report(self):
         """Test nmap report method collect_report()."""
-        report = collect_report(
-            self.subdomain_set, self.hostname, self.port)
+        report = collect_report(self.subdomain_set, self.hostname, self.port)
         self.assertIsInstance(report, str)
 
     def test_collect_report_empty(self):
@@ -128,9 +123,8 @@ class TestGetAltName(unittest.TestCase):
     def test_nmap_output(self):
         """Test if output from nmap scan was successful."""
         domains = {}
-        domains[self.hostname] = {'count': len(self.subdomain_set),
-                                  'subdomains': list(self.subdomain_set)}
-        nmap_output(domains, 'data.out')
-        with open('data.out', 'r') as data:
+        domains[self.hostname] = {"count": len(self.subdomain_set), "subdomains": list(self.subdomain_set)}
+        nmap_output(domains, "data.out")
+        with open("data.out", "r") as data:
             report = json.dumps(data.read())
         self.assertTrue(json.loads(report))
