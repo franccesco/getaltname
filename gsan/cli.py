@@ -5,19 +5,21 @@ from sys import exit
 import OpenSSL
 import click
 import pandas as pd
-import requests
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 from pyasn1.codec.der import decoder
 
+from gsan.crtsh import get_crtsh
+from gsan.clean_df import reindex_df
+from gsan.clean_df import concat_dfs
+from gsan.output import dump_filename
 from gsan.version import about_message
-
-# TODO: Create methods to DRY code (cleaning df's)
-# TODO: Integrate site method with crt.sh
+from gsan.clean_df import filter_domain
 
 
 @click.group()
 @click.version_option(version="4.0.0", message=about_message)
 def cli():
+    """Get subdomain names from SSL Certificates."""
     pass
 
 
@@ -31,47 +33,16 @@ def crtsh(domains, match_domain, output, timeout):
     subdomains_data = []
     for domain in domains:
         click.secho(f"[+] Getting subdomains for {domain}", bold=True)
-        crt_req = requests.get(f"https://crt.sh/?dNSName=%25{domain}&output=json", timeout=timeout).json()
-        crt_json = json.dumps(crt_req)
-
-        if crt_json == "[]":
-            empty_df = pd.DataFrame(columns={domain: ""})
-            subdomains_data.append(empty_df)
-            continue
-        subdomain_df = pd.read_json(crt_json)["name_value"]
-        subdomain_df = subdomain_df.str.lower()
-        subdomain_df = subdomain_df.str.replace("www.", "")
-        subdomain_df = subdomain_df.str.replace("\*.", "")
-        subdomain_df.drop_duplicates(inplace=True)
-
+        subdomain_df = get_crtsh(domain, timeout)
         if match_domain:
-            subdomain_df = subdomain_df[subdomain_df.str.endswith(f".{domain}")]
-        subdomain_df.reset_index(drop=True, inplace=True)
-        subdomain_df.index += 1
+            subdomain_df = filter_domain(subdomain_df, domain)
+        subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
-
-    concat_df = pd.concat(subdomains_data, axis="columns")
-    concat_df.fillna("", inplace=True)
-    concat_df.columns = [header.upper() for header in domains]
-
+    merged_subdomains = concat_dfs(subdomains_data, domains)
     click.secho("[+] Results:", bold=True)
-    print(concat_df.to_string())
-
+    print(merged_subdomains.to_string())
     if output:
-        output = output.lower()
-        if output.endswith(".json"):
-            click.secho(f"\n[+] Contents dumped into JSON file: {output}", bold=True)
-            with open(output, "w+") as file_object:
-                file_object.write(json.dumps(concat_df.to_dict(orient="list")))
-        elif output.endswith(".csv"):
-            click.secho(f"\n[+] Contents dumped into CSV file: {output}", bold=True)
-            concat_df.to_csv(output, index=False)
-        elif output == "cb":
-            click.secho(f"\n[+] Contents dumped into clipboard.", bold=True)
-            concat_df.to_clipboard(index=False)
-        else:
-            click.secho("\n[!] Extension not recognized, dumping using CSV format.", bold=True)
-            concat_df.to_csv(output, index=False)
+        dump_filename(output, merged_subdomains)
 
 
 @cli.command("site")
@@ -89,7 +60,7 @@ def scan_site(hostnames, port, match_domain, output):
         subdomains = []
         try:
             cert = ssl.get_server_certificate((hostname, port))
-        except Exception as e:
+        except Exception:
             click.secho(f"\n[!] Unable to connect to host {hostname}.", bold=True, fg="red")
             exit(1)
 
@@ -127,26 +98,7 @@ def scan_site(hostnames, port, match_domain, output):
     print(concat_df.to_string())
 
     if output:
-        output = output.lower()
-        if output.endswith(".json"):
-            click.secho(f"\n[+] Contents dumped into JSON file: {output}", bold=True)
-            with open(output, "w+") as file_object:
-                file_object.write(json.dumps(concat_df.to_dict(orient="list")))
-        elif output.endswith(".csv"):
-            click.secho(f"\n[+] Contents dumped into CSV file: {output}", bold=True)
-            concat_df.to_csv(output, index=False)
-        elif output == "cb":
-            click.secho(f"\n[+] Contents dumped into clipboard.", bold=True)
-            concat_df.to_clipboard(index=False)
-        else:
-            click.secho("\n[!] Extension not recognized, dumping using CSV format.", bold=True)
-            concat_df.to_csv(output, index=False)
-
-
-@click.command()
-def about():
-    """Information and version number."""
-    pass
+        dump_filename(output, concat_df)
 
 
 if __name__ == "__main__":
