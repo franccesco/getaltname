@@ -7,7 +7,7 @@ import pandas as pd
 from gsan.clean_df import strip_chars
 
 
-def get_crtsh(domain, timeout):
+def get_crtsh(domain, timeout=30):
     try:
         crt_req = requests.get(f"https://crt.sh/?dNSName=%25{domain}&output=json", timeout=timeout).json()
     except requests.exceptions.ConnectionError:
