@@ -20,6 +20,8 @@ ndg-httpsclient = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.9"
+coverage = "^4.5"
+pytest = "^5.3"
 
 [tool.black]
 line-length = 120

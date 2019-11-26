@@ -1,12 +1,13 @@
 import io
-import sys
 import json
+import sys
 import unittest
 from os import remove
+
 from gsan.banner import banner
 from gsan.get_san import get_san
-from gsan.crt_sh import search_crt
 from gsan.report import output, report_single, collect_report, nmap_output
+
 from gsan.nmap_parsing import parse_nmap
 
 
