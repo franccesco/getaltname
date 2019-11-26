@@ -1,12 +1,17 @@
-import pandas as pd
 import json
+
+import click
 import requests
+import pandas as pd
 
 from gsan.clean_df import strip_chars
 
 
 def get_crtsh(domain, timeout):
-    crt_req = requests.get(f"https://crt.sh/?dNSName=%25{domain}&output=json", timeout=timeout).json()
+    try:
+        crt_req = requests.get(f"https://crt.sh/?dNSName=%25{domain}&output=json", timeout=timeout).json()
+    except requests.exceptions.ConnectionError:
+        click.secho("Failed to connect to CRT.SH, Try again.", bold=True, fg="red")
     crt_json = json.dumps(crt_req)
 
     if crt_json == "[]":
