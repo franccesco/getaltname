@@ -11,6 +11,7 @@ from pyasn1.codec.der import decoder
 from gsan.crtsh import get_crtsh
 from gsan.clean_df import reindex_df
 from gsan.clean_df import concat_dfs
+from gsan.clean_df import strip_chars
 from gsan.output import dump_filename
 from gsan.version import about_message
 from gsan.clean_df import filter_domain
@@ -27,7 +28,7 @@ def cli():
 @click.argument("domains", nargs=-1)
 @click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
 @click.option("-o", "--output", help="Output to path/filename.")
-@click.option("-t", "--timeout", type=int, help="Set timeout for CRT.SH")
+@click.option("-t", "--timeout", default=30, type=int, help="Set timeout for CRT.SH")
 def crtsh(domains, match_domain, output, timeout):
     """Get domains from crt.sh"""
     subdomains_data = []
@@ -50,7 +51,8 @@ def crtsh(domains, match_domain, output, timeout):
 @click.option("-p", "--port", default=443)
 @click.option("-o", "--output", help="Output to path/filename.")
 @click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
-def scan_site(hostnames, port, match_domain, output):
+@click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH")
+def scan_site(hostnames, port, match_domain, output, crtsh):
     """Get domains directly from HTTPS server"""
     subdomains_data = []
     subjaltname = SubjectAltName()
@@ -80,19 +82,16 @@ def scan_site(hostnames, port, match_domain, output):
                             component = name.getComponentByPosition(entry)
                             subdomains.append(str(component.getComponent()))
         subdomain_df = pd.Series(subdomains)
-        subdomain_df = subdomain_df.str.lower()
-        subdomain_df = subdomain_df.str.replace("www.", "")
-        subdomain_df = subdomain_df.str.replace("\*.", "")
-        subdomain_df.drop_duplicates(inplace=True)
+        if crtsh:
+            crtsh_results = get_crtsh(hostname)
+            subdomain_df = pd.concat([subdomain_df, crtsh_results])
+        subdomain_df = strip_chars(subdomain_df)
         if match_domain:
-            subdomain_df = subdomain_df[subdomain_df.str.endswith(f".{hostname}")]
-        subdomain_df.reset_index(drop=True, inplace=True)
-        subdomain_df.index += 1
+            subdomain_df = filter_domain(subdomain_df, hostname)
+        subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
 
-    concat_df = pd.concat(subdomains_data, axis="columns")
-    concat_df.fillna("", inplace=True)
-    concat_df.columns = [header.upper() for header in hostnames]
+    concat_df = concat_dfs(subdomains_data, hostnames)
 
     click.secho("[+] Results:", bold=True)
     print(concat_df.to_string())
