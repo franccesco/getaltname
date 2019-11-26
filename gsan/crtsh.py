@@ -1,8 +1,8 @@
 import json
 
 import click
-import requests
 import pandas as pd
+import requests
 
 from gsan.clean_df import strip_chars
 

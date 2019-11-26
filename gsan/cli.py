@@ -1,4 +1,3 @@
-import json
 import ssl
 from sys import exit
 
@@ -8,13 +7,13 @@ import pandas as pd
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 from pyasn1.codec.der import decoder
 
-from gsan.crtsh import get_crtsh
-from gsan.clean_df import reindex_df
 from gsan.clean_df import concat_dfs
+from gsan.clean_df import filter_domain
+from gsan.clean_df import reindex_df
 from gsan.clean_df import strip_chars
+from gsan.crtsh import get_crtsh
 from gsan.output import dump_filename
 from gsan.version import about_message
-from gsan.clean_df import filter_domain
 
 
 @click.group()
