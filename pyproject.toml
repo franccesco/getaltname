@@ -22,6 +22,7 @@ ndg-httpsclient = "^0.5.1"
 ipython = "^7.9"
 coverage = "^4.5"
 pytest = "^5.3"
+pudb = "^2019.2"
 
 [tool.black]
 line-length = 120
