@@ -1,8 +1,10 @@
 import ssl
 from sys import exit
+from os.path import isfile
 
 import OpenSSL
 import click
+from socket import setdefaulttimeout
 import pandas as pd
 from ndg.httpsclient.subj_alt_name import SubjectAltName
 from pyasn1.codec.der import decoder
@@ -14,6 +16,7 @@ from gsan.clean_df import strip_chars
 from gsan.crtsh import get_crtsh
 from gsan.output import dump_filename
 from gsan.version import about_message
+from gsan.extract_host_port import parse_host_port
 
 
 @click.group()
@@ -47,22 +50,34 @@ def crtsh(domains, match_domain, output, timeout):
 
 @cli.command("site")
 @click.argument("hostnames", nargs=-1)
-@click.option("-p", "--port", default=443)
 @click.option("-o", "--output", help="Output to path/filename.")
 @click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
 @click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH")
-def scan_site(hostnames, port, match_domain, output, crtsh):
+@click.option("-t", "--timeout", default=3, help="Set timeout [3]")
+def scan_site(hostnames, match_domain, output, crtsh, timeout):
     """Get domains directly from HTTPS server"""
     subdomains_data = []
     subjaltname = SubjectAltName()
 
+    if isfile(hostnames[0]):
+        with open(hostnames[0], 'r') as host_file:
+            hostnames = [host.rstrip('\n') for host in host_file]
+        hostnames = [parse_host_port(host) for host in hostnames]
+    else:
+        hostnames = [parse_host_port(host) for host in hostnames]
+
+    bad_hosts = []
     for hostname in hostnames:
-        click.secho(f"[+] Getting subdomains for {hostname}", bold=True)
+        click.secho(f"[+] Getting subdomains for {hostname[0]}", bold=True)
         subdomains = []
+        port = hostname[1] if hostname[1] else 443
+        setdefaulttimeout(timeout)
         try:
-            cert = ssl.get_server_certificate((hostname, port))
+            cert = ssl.get_server_certificate((hostname[0], port))
         except Exception:
-            click.secho(f"[!] Unable to connect to host {hostname}", bold=True, fg="red")
+            click.secho(f"[!] Unable to connect to host {hostname[0]}", bold=True, fg="red")
+            bad_hosts.append(hostname[0])
+            continue
 
         # Thanks to Cato- for this piece of code:
         # https://gist.github.com/cato-/6551668
@@ -90,7 +105,10 @@ def scan_site(hostnames, port, match_domain, output, crtsh):
         subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
 
-    concat_df = concat_dfs(subdomains_data, hostnames)
+    column_names = [name[0] for name in hostnames]
+    for name in bad_hosts:
+        column_names.remove(name)
+    concat_df = concat_dfs(subdomains_data, column_names)
     click.secho("[+] Results:", bold=True)
     print(concat_df.to_string())
 
