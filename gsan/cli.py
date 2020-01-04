@@ -60,8 +60,8 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout):
     subjaltname = SubjectAltName()
 
     if isfile(hostnames[0]):
-        with open(hostnames[0], 'r') as host_file:
-            hostnames = [host.rstrip('\n') for host in host_file]
+        with open(hostnames[0], "r") as host_file:
+            hostnames = [host.rstrip("\n") for host in host_file]
         hostnames = [parse_host_port(host) for host in hostnames]
     else:
         hostnames = [parse_host_port(host) for host in hostnames]
