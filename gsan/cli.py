@@ -62,8 +62,7 @@ def scan_site(hostnames, port, match_domain, output, crtsh):
         try:
             cert = ssl.get_server_certificate((hostname, port))
         except Exception:
-            click.secho(f"\n[!] Unable to connect to host {hostname}.", bold=True, fg="red")
-            exit(1)
+            click.secho(f"[!] Unable to connect to host {hostname}", bold=True, fg="red")
 
         # Thanks to Cato- for this piece of code:
         # https://gist.github.com/cato-/6551668
@@ -84,14 +83,14 @@ def scan_site(hostnames, port, match_domain, output, crtsh):
         if crtsh:
             crtsh_results = get_crtsh(hostname)
             subdomain_df = pd.concat([subdomain_df, crtsh_results])
-        subdomain_df = strip_chars(subdomain_df)
+        if subdomains:
+            subdomain_df = strip_chars(subdomain_df)
         if match_domain:
             subdomain_df = filter_domain(subdomain_df, hostname)
         subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
 
     concat_df = concat_dfs(subdomains_data, hostnames)
-
     click.secho("[+] Results:", bold=True)
     print(concat_df.to_string())
 

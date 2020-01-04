@@ -26,6 +26,7 @@ def reindex_df(subdomain_df):
 def concat_dfs(subdomain_dfs, headers):
     """Concatenate, fill N/A's and rename columns."""
     concat_df = pd.concat(subdomain_dfs, axis="columns")
-    concat_df.fillna("", inplace=True)
     concat_df.columns = [header.upper() for header in headers]
+    concat_df.dropna(axis=1, how='all', inplace=True)
+    concat_df.fillna("", inplace=True)
     return concat_df
