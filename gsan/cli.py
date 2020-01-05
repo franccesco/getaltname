@@ -115,8 +115,6 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout):
     column_names = [name[0] for name in hostnames]
     for name in bad_hosts:
         column_names.remove(name)
-    # TODO: Check concatenation of empty dataframes
-    # gsan scan facebook.com:80
     try:
         concat_df = concat_dfs(subdomains_data, column_names)
     except ValueError:
