@@ -48,14 +48,21 @@ def crtsh(domains, match_domain, output, timeout):
         dump_filename(output, merged_subdomains)
 
 
-@cli.command("site")
+@cli.command("scan")
 @click.argument("hostnames", nargs=-1)
 @click.option("-o", "--output", help="Output to path/filename.")
 @click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
 @click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH")
-@click.option("-t", "--timeout", default=3, help="Set timeout [3]")
+@click.option("-t", "--timeout", default=3, help="Set timeout [default: 3]")
 def scan_site(hostnames, match_domain, output, crtsh, timeout):
-    """Get domains directly from HTTPS server"""
+    """Scan domains from input or a text file, format is HOST[:PORT].
+
+    e.g: gsan scan domain1.com domain2.com:port
+
+    You can also pass a text file instead, just replace the first domain argument
+    for a file. eg: gsan scan filename.txt
+
+    If no ports are defined, then gsan assumes the port 443 is available."""
     subdomains_data = []
     subjaltname = SubjectAltName()
 
@@ -96,24 +103,30 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout):
                             subdomains.append(str(component.getComponent()))
         subdomain_df = pd.Series(subdomains)
         if crtsh:
-            crtsh_results = get_crtsh(hostname)
+            crtsh_results = get_crtsh(hostname[0])
             subdomain_df = pd.concat([subdomain_df, crtsh_results])
         if subdomains:
             subdomain_df = strip_chars(subdomain_df)
         if match_domain:
-            subdomain_df = filter_domain(subdomain_df, hostname)
+            subdomain_df = filter_domain(subdomain_df, hostname[0])
         subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
 
     column_names = [name[0] for name in hostnames]
     for name in bad_hosts:
         column_names.remove(name)
-    concat_df = concat_dfs(subdomains_data, column_names)
-    click.secho("[+] Results:", bold=True)
-    print(concat_df.to_string())
+    # TODO: Check concatenation of empty dataframes
+    # gsan scan facebook.com:80
+    try:
+        concat_df = concat_dfs(subdomains_data, column_names)
+    except ValueError:
+        click.secho(f"[!] No subdomains where found", bold=True, fg="yellow")
+    else:
+        click.secho("[+] Results:", bold=True)
+        print(concat_df.to_string())
 
-    if output:
-        dump_filename(output, concat_df)
+        if output:
+            dump_filename(output, concat_df)
 
 
 if __name__ == "__main__":
