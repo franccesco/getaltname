@@ -1,6 +1,7 @@
 import ssl
 from sys import exit
 from os.path import isfile
+from datetime import datetime
 
 import OpenSSL
 import click
@@ -28,8 +29,8 @@ def cli():
 
 @cli.command()
 @click.argument("domains", nargs=-1)
-@click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
-@click.option("-o", "--output", help="Output to path/filename.")
+@click.option("-m", "--match-domain", is_flag=True, help="Match domain name only")
+@click.option("-o", "--output", help="Output to path/filename")
 @click.option("-t", "--timeout", default=30, type=int, help="Set timeout for CRT.SH")
 def crtsh(domains, match_domain, output, timeout):
     """Get domains from crt.sh"""
@@ -50,11 +51,12 @@ def crtsh(domains, match_domain, output, timeout):
 
 @cli.command("scan")
 @click.argument("hostnames", nargs=-1)
-@click.option("-o", "--output", help="Output to path/filename.")
-@click.option("-m", "--match-domain", is_flag=True, help="Match domain name only.")
+@click.option("-o", "--output", help="Output to path/filename")
+@click.option("-m", "--match-domain", is_flag=True, help="Match domain name only")
 @click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH")
 @click.option("-t", "--timeout", default=3, help="Set timeout [default: 3]")
-def scan_site(hostnames, match_domain, output, crtsh, timeout):
+@click.option("-s", "--suppress", is_flag=True, help="Suppress output")
+def scan_site(hostnames, match_domain, output, crtsh, timeout, suppress):
     """Scan domains from input or a text file, format is HOST[:PORT].
 
     e.g: gsan scan domain1.com domain2.com:port
@@ -125,10 +127,17 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout):
     except ValueError:
         click.secho(f"[!] No subdomains where found", bold=True, fg="yellow")
     else:
-        click.secho("[+] Results:", bold=True)
-        print(concat_df.to_string())
-
-        if output:
+        if not suppress:
+            click.secho("[+] Results:", bold=True)
+            print(concat_df.to_string())
+            if output:
+                dump_filename(output, concat_df)
+        elif suppress and not output:
+            filename = datetime.now().strftime("subdomains-%Y-%m-%d-%H-%M-%S.csv")
+            click.secho("[!] Suppress was active but no output was defined", bold=True, fg="yellow")
+            click.secho(f"[!] Output was automatically generated", bold=True, fg="yellow")
+            dump_filename(filename, concat_df)
+        elif suppress and output:
             dump_filename(output, concat_df)
 
 
