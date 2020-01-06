@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "gsan"
+version = "4.0.0"
+description = "Extract subdomains from HTTPS sites"
+authors = ["Franccesco Orozco <franccesco@codingdose.info>"]
+license = "MIT"
+
+[tool.poetry.scripts]
+gsan = "gsan.cli:cli"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^7.0"
+colorama = "^0.4.1"
+pandas = "^0.25.3"
+tldextract = "^2.2"
+pyopenssl = "^19.1"
+pyasn1 = "^0.4.8"
+ndg-httpsclient = "^0.5.1"
+
+[tool.poetry.dev-dependencies]
+ipython = "^7.9"
+coverage = "^4.5"
+pytest = "^5.3"
+pudb = "^2019.2"
+
+[tool.black]
+line-length = 120
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
