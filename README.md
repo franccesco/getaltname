@@ -182,7 +182,7 @@ Contribution is welcome, just remember:
  _____ _____ _____ _____
 |   __|   __|  _  |   | |
 |  |  |__   |     | | | |
-|_____|_____|__|__|_|___| v4.0.0
+|_____|_____|__|__|_|___| v4.1.1
 
 Author:  Franccesco Orozco
 Email:   franccesco@codingdose.info
