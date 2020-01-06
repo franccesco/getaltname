@@ -102,9 +102,14 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout):
                             component = name.getComponentByPosition(entry)
                             subdomains.append(str(component.getComponent()))
         subdomain_df = pd.Series(subdomains)
+
         if crtsh:
             crtsh_results = get_crtsh(hostname[0])
-            subdomain_df = pd.concat([subdomain_df, crtsh_results])
+            if crtsh_results.empty:
+                pass
+            else:
+                subdomain_df = pd.concat([subdomain_df, crtsh_results])
+
         if subdomains:
             subdomain_df = strip_chars(subdomain_df)
         if match_domain:
