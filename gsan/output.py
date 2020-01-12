@@ -21,6 +21,7 @@ def dump_filename(filename, subdomain_df):
         with open(filename, "w") as file_object:
             for subdomain in subdomains:
                 file_object.write(f"{subdomain}\n")
+        click.secho(f"\n[+] Contents dumped into a text file: {filename}", bold=True)
     else:
         click.secho("\n[!] Extension not recognized, dumping using CSV format.", bold=True)
         subdomain_df.to_csv(filename, index=False)
