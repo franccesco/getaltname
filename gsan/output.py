@@ -1,6 +1,6 @@
 import json
-
 import click
+import pandas as pd
 
 
 def dump_filename(filename, subdomain_df):
@@ -16,6 +16,11 @@ def dump_filename(filename, subdomain_df):
     elif filename == "cb":
         click.secho(f"\n[+] Contents dumped into clipboard.", bold=True)
         subdomain_df.to_clipboard(index=False)
+    elif filename.endswith(".txt"):
+        subdomains = pd.melt(subdomain_df).value.tolist()
+        with open(filename, "w") as file_object:
+            for subdomain in subdomains:
+                file_object.write(f"{subdomain}\n")
     else:
         click.secho("\n[!] Extension not recognized, dumping using CSV format.", bold=True)
         subdomain_df.to_csv(filename, index=False)
