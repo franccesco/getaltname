@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gsan"
-version = "4.1.3"
+version = "4.2.1"
 description = "Extract subdomains from HTTPS sites"
 authors = ["Franccesco Orozco <franccesco@codingdose.info>"]
 license = "MIT"
