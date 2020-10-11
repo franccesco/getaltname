@@ -60,21 +60,21 @@ Options:
 
 $ gsan crtsh facebook.com
 [+] Getting subdomains for facebook.com
+[+] Getting subdomains for facebook.com
 [+] Results:
-                                        FACEBOOK.COM
-1                                  free-facebook.com
-2                                   the-facebook.com
-3                                google-facebook.com
-4                                    me-facebook.com
-5                                       facebook.com
-6                                  bomb-facebook.com
---- SNIP ---
-142                              china--facebook.com
-143                         imagem-para-facebook.com
-144                           aplikacje-facebook.com
-145                     tourism-ireland-facebook.com
-146                                 tsc-facebook.com
-147                             edenred-facebook.com
+
+FACEBOOK.COM
+↳ newdev.facebook.com
+↳ dewey.vip.facebook.com
+↳ secure.trunkstable.facebook.com
+↳ facebook.com
+↳ secure.intern.facebook.com
+-- SNIP --
+↳ channel.facebook.com
+↳ extools.facebook.com
+↳ china--facebook.com
+↳ adtools.facebook.com
+↳ ak.facebook.com
 ```
 
 ### Getting subdomains directly from SSL certificates
@@ -104,24 +104,37 @@ $ gsan scan facebook.com starbucks.com:443
 [+] Getting subdomains for facebook.com
 [+] Getting subdomains for starbucks.com
 [+] Results:
-      FACEBOOK.COM          STARBUCKS.COM
-1     facebook.com          starbucks.com
-2     facebook.net    app.starbucks.co.uk
-3           fb.com   app.starbucks.com.br
-4        fbcdn.net       app.starbucks.de
-5        fbsbx.com           starbucks.ca
-6    messenger.com           starbucks.fr
-7   m.facebook.com           starbucks.ie
-8     xx.fbcdn.net       app.starbucks.fr
-9     xy.fbcdn.net           starbucks.de
-10    xz.fbcdn.net       starbucks.com.br
-11                  preview.starbucks.com
-12                       app.starbucks.ca
-13                       app.starbucks.ie
-14                        starbucks.co.uk
-15                      app.starbucks.com
-16                        fr.starbucks.ca
-17                    fr.app.starbucks.ca
+
+FACEBOOK.COM
+↳ facebook.com
+↳ facebook.net
+↳ fbcdn.net
+↳ fbsbx.com
+↳ m.facebook.com
+↳ messenger.com
+↳ xx.fbcdn.net
+↳ xy.fbcdn.net
+↳ xz.fbcdn.net
+
+STARBUCKS.COM
+↳ starbucks.com
+↳ beta.starbucks.com
+↳ app.starbucks.fr
+↳ starbucks.fr
+↳ app.starbucks.co.uk
+↳ starbucks.ie
+↳ app.starbucks.com
+↳ fr.starbucks.ca
+↳ preview.starbucks.com
+↳ starbucks.ca
+↳ app.starbucks.com.br
+↳ app.starbucks.ie
+↳ starbucks.com.br
+↳ fr.app.starbucks.ca
+↳ starbucks.de
+↳ starbucks.co.uk
+↳ app.starbucks.de
+↳ app.starbucks.ca
 ```
 
 You can also pass a list of hosts their ports, formatted as host[:port] (port is optional), and gsan will go through them trying to extract subdomain names. You can use the same subcomand `scan` and pass a text file as argument instead of a domain name:
@@ -133,35 +146,27 @@ gsan scan hosts.txt -o subdomains.csv
 [+] Getting subdomains for fakedomain.com
 [!] Unable to connect to host fakedomain.com
 [+] Getting subdomains for amazon.com
-[+] Results:
-      FACEBOOK.COM          STARBUCKS.COM                         AMAZON.COM
-1     facebook.com          starbucks.com                       amazon.co.uk
-2     facebook.net    app.starbucks.co.uk                uedata.amazon.co.uk
-3           fb.com   app.starbucks.com.br                origin-amazon.co.uk
-4        fbcdn.net       app.starbucks.de                        peg.a2z.com
-5        fbsbx.com           starbucks.ca                         amazon.com
-6    messenger.com           starbucks.fr                           amzn.com
-7   m.facebook.com           starbucks.ie                  uedata.amazon.com
-8     xx.fbcdn.net       app.starbucks.fr                      us.amazon.com
-9     xy.fbcdn.net           starbucks.de               corporate.amazon.com
-10    xz.fbcdn.net       starbucks.com.br                  buybox.amazon.com
-11                  preview.starbucks.com                  iphone.amazon.com
-12                       app.starbucks.ca                      yp.amazon.com
-13                       app.starbucks.ie                    home.amazon.com
-14                        starbucks.co.uk                  origin-amazon.com
-15                      app.starbucks.com  buckeye-retail-website.amazon.com
-16                        fr.starbucks.ca                 huddles.amazon.com
-17                    fr.app.starbucks.ca                          amazon.de
-18                                                          origin-amazon.de
-19                                                              amazon.co.jp
-20                                                                 amazon.jp
-21                                                       origin-amazon.co.jp
-22                                                            aa.peg.a2z.com
-23                                                            ab.peg.a2z.com
-24                                                            ac.peg.a2z.com
-25                                                      origin-amazon.com.au
-26                                                             amazon.com.au
-27                                                            bz.peg.a2z.com
+FACEBOOK.COM
+↳ facebook.com
+↳ facebook.net
+-- SNIP --
+↳ xy.fbcdn.net
+↳ xz.fbcdn.net
+
+STARBUCKS.COM
+↳ starbucks.com
+↳ beta.starbucks.com
+-- SNIP --
+↳ app.starbucks.de
+↳ app.starbucks.ca
+
+AMAZON.COM
+↳ amazon.co.uk
+↳ uedata.amazon.co.uk
+-- SNIP --
+↳ bz.peg.a2z.com
+↳ origin2-amazon.co.jp
+
 
 [+] Contents dumped into CSV file: subdomains.csv
 ```
@@ -189,7 +194,7 @@ Contribution is welcome, just remember:
  _____ _____ _____ _____
 |   __|   __|  _  |   | |
 |  |  |__   |     | | | |
-|_____|_____|__|__|_|___| v4.2.0
+|_____|_____|__|__|_|___| v4.2.3
 
 Author:  Franccesco Orozco
 Email:   franccesco@codingdose.info

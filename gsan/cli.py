@@ -21,7 +21,7 @@ from gsan.extract_host_port import parse_host_port
 
 
 @click.group()
-@click.version_option(version="4.2.2", message=about_message)
+@click.version_option(version="4.2.3", message=about_message)
 def cli():
     """Get subdomain names from SSL Certificates."""
     pass
@@ -43,8 +43,15 @@ def crtsh(domains, match_domain, output, timeout):
         subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
     merged_subdomains = concat_dfs(subdomains_data, domains)
-    click.secho("[+] Results:", bold=True)
-    print(merged_subdomains.to_string())
+    click.secho("[+] Results:\n", bold=True)
+    for column_name in merged_subdomains:
+        click.secho(column_name, bold=True, underline=True)
+        domains = merged_subdomains[column_name].dropna(how="all").to_list()
+        for domain in domains:
+            arrow = click.style("↳ ", bold=True, fg="green")
+            print(arrow, end="")
+            print(f"{domain}")
+        print("")
     if output:
         dump_filename(output, merged_subdomains)
 
