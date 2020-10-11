@@ -17,7 +17,8 @@ def dump_filename(filename, subdomain_df):
         click.secho(f"\n[+] Contents dumped into clipboard.", bold=True)
         subdomain_df.to_clipboard(index=False)
     elif filename.endswith(".txt"):
-        subdomains = pd.melt(subdomain_df).value.tolist()
+        melted_df = pd.melt(subdomain_df).value.tolist()
+        subdomains = [subdomain for subdomain in melted_df if str(subdomain) != "nan"]
         with open(filename, "w") as file_object:
             for subdomain in subdomains:
                 file_object.write(f"{subdomain}\n")

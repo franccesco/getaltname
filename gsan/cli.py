@@ -53,7 +53,7 @@ def crtsh(domains, match_domain, output, timeout):
 @click.argument("hostnames", nargs=-1)
 @click.option("-o", "--output", help="Output to path/filename")
 @click.option("-m", "--match-domain", is_flag=True, help="Match domain name only")
-@click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH")
+@click.option("-c", "--crtsh", is_flag=True, help="Include results from CRT.SH - SLOW!")
 @click.option("-t", "--timeout", default=3, help="Set timeout [default: 3]")
 @click.option("-s", "--suppress", is_flag=True, help="Suppress output")
 def scan_site(hostnames, match_domain, output, crtsh, timeout, suppress):
@@ -115,7 +115,8 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout, suppress):
         if subdomains:
             subdomain_df = strip_chars(subdomain_df)
         if match_domain:
-            subdomain_df = filter_domain(subdomain_df, hostname[0])
+            if subdomain_df.any():
+                subdomain_df = filter_domain(subdomain_df, hostname[0])
         subdomain_df = reindex_df(subdomain_df)
         subdomains_data.append(subdomain_df)
 
@@ -128,8 +129,15 @@ def scan_site(hostnames, match_domain, output, crtsh, timeout, suppress):
         click.secho(f"[!] No subdomains where found", bold=True, fg="yellow")
     else:
         if not suppress:
-            click.secho("[+] Results:", bold=True)
-            print(concat_df.to_string())
+            click.secho("[+] Results:\n", bold=True)
+            for column_name in concat_df:
+                click.secho(column_name, bold=True, underline=True)
+                domains = concat_df[column_name].dropna(how="all").to_list()
+                for domain in domains:
+                    arrow = click.style("↳ ", bold=True, fg="green")
+                    print(arrow, end="")
+                    print(f"{domain}")
+                print("")
             if output:
                 dump_filename(output, concat_df)
         elif suppress and not output:
