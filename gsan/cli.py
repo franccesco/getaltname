@@ -21,7 +21,7 @@ from gsan.extract_host_port import parse_host_port
 
 
 @click.group()
-@click.version_option(version="4.2.2", message=about_message)
+@click.version_option(version="4.2.3", message=about_message)
 def cli():
     """Get subdomain names from SSL Certificates."""
     pass
