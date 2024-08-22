@@ -1,4 +1,5 @@
 import ssl
+import json
 import socket
 import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -125,12 +126,16 @@ def main(
     port: int = typer.Option(443, help="Port number to connect to"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
+    json_output: bool = typer.Option(
+        False, "--json", help="Output results in JSON format"
+    ),
 ):
     """
     Main function to check the subdomains and IP addresses present in the certificates of the specified domains.
     """
     context = allow_unsigned_certificate()  # Reuse SSL context
     failed_domains = []
+    results = {}
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [
@@ -139,23 +144,30 @@ def main(
         ]
 
         for future in track(
-            as_completed(futures),
-            description="Checking certificates...",
-            transient=True,
+            as_completed(futures), description="Checking certificates...", transient=True
         ):
             domain, subdomains, error = future.result()
             if error:
                 failed_domains.append(domain)
-            elif subdomains:
-                subdomain_count = len(subdomains)
-                rprint(f"\n[bold green]{domain}[/bold green] [{subdomain_count}]:")
-                for subdomain in subdomains:
-                    rprint(f"- {subdomain}")
+            else:
+                results[domain] = subdomains
 
-    if failed_domains:
-        rprint(f"\nFailed to check certificates for the following domains:")
-        for failed_domain in failed_domains:
-            rprint(f"- [bold red]{failed_domain}[/bold red]")
+    if json_output:
+        # Output the results and failed domains as JSON
+        output_data = {"results": results, "failed_domains": failed_domains}
+        rprint(json.dumps(output_data, indent=4))
+    else:
+        # Default rich output
+        for domain, subdomains in results.items():
+            subdomain_count = len(subdomains)
+            rprint(f"\n[bold green]{domain}[/bold green] [{subdomain_count}]:")
+            for subdomain in subdomains:
+                rprint(f"- {subdomain}")
+
+        if failed_domains:
+            rprint(f"\nFailed to check certificates for the following domains:")
+            for failed_domain in failed_domains:
+                rprint(f"- [bold red]{failed_domain}[/bold red]")
 
 
 if __name__ == "__main__":
