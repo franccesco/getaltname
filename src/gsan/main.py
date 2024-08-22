@@ -1,7 +1,6 @@
 import ssl
 import socket
 import ipaddress
-from typing import List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import typer
@@ -122,7 +121,7 @@ def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLConte
 
 @app.command()
 def main(
-    domains: List[str] = typer.Argument(..., help="List of domains to check"),
+    domains: list[str] = typer.Argument(..., help="List of domains to check"),
     port: int = typer.Option(443, help="Port number to connect to"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
