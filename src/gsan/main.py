@@ -11,7 +11,7 @@ from OpenSSL import crypto
 from pyasn1.codec.der import decoder
 from pyasn1.type import univ, char, namedtype, tag
 
-app = typer.Typer()
+app = typer.Typer(add_completion=False)
 
 
 class IPAddress(univ.OctetString):
