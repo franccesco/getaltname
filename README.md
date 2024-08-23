@@ -6,9 +6,9 @@ It doesn't rely on Certificate Transparency logs, it connects directly to the se
 
 ## Installation
 
-Use pipx to avoid contaminating your system with a bunch of dependencies.
+Use pip (or pipx - recommended) to avoid contaminating your system with a bunch of dependencies.
 ```bash
-$ pip install --user gsan
+$ pipx install --user gsan
 ```
 
 You can also install and run it using Docker.
