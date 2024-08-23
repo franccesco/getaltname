@@ -144,7 +144,7 @@ def process_domains(domains_with_ports, timeout, max_workers):
 def output_results(results, failed_domains, json_output, output_file):
     if json_output:
         output_data = {"results": results, "failed_domains": failed_domains}
-        rprint(json.dumps(output_data, indent=4))
+        rprint(json.dumps(output_data, indent=2))
     elif output_file:
         with open(output_file, 'w') as f:
             for subdomains in results.values():
