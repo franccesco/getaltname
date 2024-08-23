@@ -126,9 +126,8 @@ def main(
     port: int = typer.Option(443, help="Port number to connect to"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
-    json_output: bool = typer.Option(
-        False, "--json", help="Output results in JSON format"
-    ),
+    json_output: bool = typer.Option(False, "--json", help="Output results in JSON format"),
+    output_file: str = typer.Option(None, "--output", help="File to write the results to")
 ):
     """
     Main function to check the subdomains and IP addresses present in the certificates of the specified domains.
@@ -156,6 +155,10 @@ def main(
         # Output the results and failed domains as JSON
         output_data = {"results": results, "failed_domains": failed_domains}
         rprint(json.dumps(output_data, indent=4))
+    if output_file:
+        with open(output_file, 'w') as f:
+            for domain, subdomains in results.items():
+                f.writelines(f"{subdomain}\n" for subdomain in subdomains)
     else:
         # Default rich output
         for domain, subdomains in results.items():
