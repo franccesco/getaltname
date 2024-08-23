@@ -13,7 +13,7 @@ $ pip install --user gsan
 
 You can also install and run it using Docker.
 ```bash
-$ docker run --rm -it francc3sco/gsan <DOMAIN>
+$ docker run --rm -i francc3sco/gsan <DOMAIN>
 ```
 
 ## Usage
@@ -51,4 +51,33 @@ youtube.com [93]:
 - google.fr
 ...
 - google.com.au
+```
+
+If you're using the dockerized version, you can achieve the same by doing:
+```bash
+$ cat domains.txt | xargs docker run --rm -i francc3sco/gsan
+```
+
+You can combine gsan with other tools like shodan to get a list of SANs found in a list of domains or IP addresses as long as you respect the IP|DOMAIN:PORT format.
+```bash
+$ shodan search --fields ip_str,port --separator : --limit 100 https | cut -d : -f 1,2 | xargs gsan --timeout 1
+
+207.21.195.58 [1]:
+- orielstat.com
+
+162.159.135.42 [4]:
+- temp927.kinsta.cloud
+- temp312.kinsta.cloud
+
+34.230.178.151 [2]:
+- procareltc.com
+- clarest.com
+
+20.62.53.137 [1]:
+- budget.lis.virginia.gov
+
+199.60.103.228 [3]:
+- hscoscdn40.net
+- sites-proxy.hscoscdn40.net
+...
 ```
