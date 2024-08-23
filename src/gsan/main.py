@@ -99,7 +99,7 @@ def extract_subdomains(x509: crypto.X509) -> list:
         raise ValueError(f"Error extracting subdomains from the certificate: {str(e)}")
 
 
-def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLContext):
+def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLContext, print_results: bool):
     """
     Processes the domain by retrieving the certificate and extracting subdomains.
     """
@@ -115,18 +115,23 @@ def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLConte
         if len(subdomains) == 1 and subdomains[0] == domain:
             return None
 
+        if print_results:
+            rprint(f"\n[bold green]{domain}[/bold green] [{len(subdomains)}]:")
+            for subdomain in subdomains:
+                rprint(f"- {subdomain}")
+
         return domain, subdomains, None
     except Exception as e:
         return domain, None, str(e)
 
 
-def process_domains(domains_with_ports, timeout, max_workers):
+def process_domains(domains_with_ports, timeout, max_workers, print_results):
     context = allow_unsigned_certificate()
     results = {}
     failed_domains = []
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(process_domain, domain, port, timeout, context) for domain, port in domains_with_ports]
+        futures = [executor.submit(process_domain, domain, port, timeout, context, print_results) for domain, port in domains_with_ports]
 
         for future in track(as_completed(futures), description="Checking certificates...", transient=True):
             result = future.result()
@@ -141,24 +146,14 @@ def process_domains(domains_with_ports, timeout, max_workers):
     return results, failed_domains
 
 
-def output_results(results, failed_domains, json_output, output_file):
-    if json_output:
+def output_results(results, failed_domains, output_format, output_file):
+    if output_format == "json":
         output_data = {"results": results, "failed_domains": failed_domains}
         rprint(json.dumps(output_data, indent=2))
     elif output_file:
         with open(output_file, 'w') as f:
             for subdomains in results.values():
                 f.writelines(f"{subdomain}\n" for subdomain in subdomains)
-    else:
-        for domain, subdomains in results.items():
-            rprint(f"\n[bold green]{domain}[/bold green] [{len(subdomains)}]:")
-            for subdomain in subdomains:
-                rprint(f"- {subdomain}")
-
-        if failed_domains:
-            rprint(f"\nFailed to check certificates for the following domains:")
-            for failed_domain in failed_domains:
-                rprint(f"- [bold red]{failed_domain}[/bold red]")
 
 
 @app.command()
@@ -166,7 +161,7 @@ def main(
     domains: list[str] = typer.Argument(..., help="List of domains to check"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
-    json_output: bool = typer.Option(False, "--json", help="Output results in JSON format"),
+    output_format: str = typer.Option("txt", "--format", help="Output format: 'txt' or 'json'"),
     output_file: str = typer.Option(None, "--output", help="File to write the results to")
 ):
     """
@@ -182,8 +177,9 @@ def main(
             port = 443  # default port
         parsed_domains.append((host, port))
 
-    results, failed_domains = process_domains(parsed_domains, timeout, max_workers)
-    output_results(results, failed_domains, json_output, output_file)
+    print_results = output_file is None
+    results, failed_domains = process_domains(parsed_domains, timeout, max_workers, print_results)
+    output_results(results, failed_domains, output_format, output_file)
 
 
 if __name__ == "__main__":
