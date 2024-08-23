@@ -120,6 +120,44 @@ def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLConte
         return domain, None, str(e)
 
 
+def process_domains(domains, port, timeout, max_workers):
+    context = allow_unsigned_certificate()
+    results = {}
+    failed_domains = []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(process_domain, domain, port, timeout, context) for domain in domains]
+
+        for future in track(as_completed(futures), description="Checking certificates...", transient=True):
+            domain, subdomains, error = future.result()
+            if error:
+                failed_domains.append(domain)
+            else:
+                results[domain] = subdomains
+
+    return results, failed_domains
+
+
+def output_results(results, failed_domains, json_output, output_file):
+    if json_output:
+        output_data = {"results": results, "failed_domains": failed_domains}
+        rprint(json.dumps(output_data, indent=4))
+    elif output_file:
+        with open(output_file, 'w') as f:
+            for subdomains in results.values():
+                f.writelines(f"{subdomain}\n" for subdomain in subdomains)
+    else:
+        for domain, subdomains in results.items():
+            rprint(f"\n[bold green]{domain}[/bold green] [{len(subdomains)}]:")
+            for subdomain in subdomains:
+                rprint(f"- {subdomain}")
+
+        if failed_domains:
+            rprint(f"\nFailed to check certificates for the following domains:")
+            for failed_domain in failed_domains:
+                rprint(f"- [bold red]{failed_domain}[/bold red]")
+
+
 @app.command()
 def main(
     domains: list[str] = typer.Argument(..., help="List of domains to check"),
@@ -130,47 +168,10 @@ def main(
     output_file: str = typer.Option(None, "--output", help="File to write the results to")
 ):
     """
-    Main function to check the subdomains and IP addresses present in the certificates of the specified domains.
+    Check the subdomains and IP addresses present in the certificates of the specified domains.
     """
-    context = allow_unsigned_certificate()  # Reuse SSL context
-    failed_domains = []
-    results = {}
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [
-            executor.submit(process_domain, domain, port, timeout, context)
-            for domain in domains
-        ]
-
-        for future in track(
-            as_completed(futures), description="Checking certificates...", transient=True
-        ):
-            domain, subdomains, error = future.result()
-            if error:
-                failed_domains.append(domain)
-            else:
-                results[domain] = subdomains
-
-    if json_output:
-        # Output the results and failed domains as JSON
-        output_data = {"results": results, "failed_domains": failed_domains}
-        rprint(json.dumps(output_data, indent=4))
-    if output_file:
-        with open(output_file, 'w') as f:
-            for domain, subdomains in results.items():
-                f.writelines(f"{subdomain}\n" for subdomain in subdomains)
-    else:
-        # Default rich output
-        for domain, subdomains in results.items():
-            subdomain_count = len(subdomains)
-            rprint(f"\n[bold green]{domain}[/bold green] [{subdomain_count}]:")
-            for subdomain in subdomains:
-                rprint(f"- {subdomain}")
-
-        if failed_domains:
-            rprint(f"\nFailed to check certificates for the following domains:")
-            for failed_domain in failed_domains:
-                rprint(f"- [bold red]{failed_domain}[/bold red]")
+    results, failed_domains = process_domains(domains, port, timeout, max_workers)
+    output_results(results, failed_domains, json_output, output_file)
 
 
 if __name__ == "__main__":
