@@ -107,25 +107,32 @@ def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLConte
         x509 = get_certificate(domain, port, timeout, context)
         subdomains = clean_domains(extract_subdomains(x509))
 
+        # Skip if no subdomains are found
+        if not subdomains:
+            return None
+
         # Skip if only one subdomain exists and it is equal to the main domain
         if len(subdomains) == 1 and subdomains[0] == domain:
-            return domain, [], None
+            return None
 
         return domain, subdomains, None
     except Exception as e:
         return domain, None, str(e)
 
 
-def process_domains(domains, port, timeout, max_workers):
+def process_domains(domains_with_ports, timeout, max_workers):
     context = allow_unsigned_certificate()
     results = {}
     failed_domains = []
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(process_domain, domain, port, timeout, context) for domain in domains]
+        futures = [executor.submit(process_domain, domain, port, timeout, context) for domain, port in domains_with_ports]
 
         for future in track(as_completed(futures), description="Checking certificates...", transient=True):
-            domain, subdomains, error = future.result()
+            result = future.result()
+            if result is None:
+                continue
+            domain, subdomains, error = result
             if error:
                 failed_domains.append(domain)
             else:
@@ -157,7 +164,6 @@ def output_results(results, failed_domains, json_output, output_file):
 @app.command()
 def main(
     domains: list[str] = typer.Argument(..., help="List of domains to check"),
-    port: int = typer.Option(443, help="Port number to connect to"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
     json_output: bool = typer.Option(False, "--json", help="Output results in JSON format"),
@@ -166,7 +172,17 @@ def main(
     """
     Check the subdomains and IP addresses present in the certificates of the specified domains.
     """
-    results, failed_domains = process_domains(domains, port, timeout, max_workers)
+    parsed_domains = []
+    for domain in domains:
+        if ':' in domain:
+            host, port = domain.split(':')
+            port = int(port)
+        else:
+            host = domain
+            port = 443  # default port
+        parsed_domains.append((host, port))
+
+    results, failed_domains = process_domains(parsed_domains, timeout, max_workers)
     output_results(results, failed_domains, json_output, output_file)
 
 
