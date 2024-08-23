@@ -14,10 +14,6 @@ from pyasn1.type import univ, char, namedtype, tag
 app = typer.Typer(add_completion=False)
 
 
-class IPAddress(univ.OctetString):
-    pass
-
-
 class GeneralName(univ.Choice):
     componentType = namedtype.NamedTypes(
         namedtype.NamedType(
@@ -28,7 +24,7 @@ class GeneralName(univ.Choice):
         ),
         namedtype.NamedType(
             "iPAddress",
-            IPAddress().subtype(
+            univ.OctetString().subtype(
                 implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
             ),
         ),
