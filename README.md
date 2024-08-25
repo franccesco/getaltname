@@ -81,3 +81,21 @@ $ shodan search --fields ip_str,port --separator : --limit 100 https | cut -d : 
 - sites-proxy.hscoscdn40.net
 ...
 ```
+
+You can also output to a file by using the `--output` flag which can be useful to then pass the output to other tools such as Nmap.
+```bash
+$ gsan microsoft.com --output microsoft.txt | nmap -iL microsoft.txt
+```
+
+Or, if you have a large list of domains:
+```bash
+$ cat domains.txt | xargs gsan --output domains.txt | nmap -iL domains.txt
+```
+
+Or, if you want chaos to take the world:
+```bash
+$ shodan search --fields ip_str,port --separator : --limit 1000 has_ipv6:false https | \
+  cut -d : -f 1,2 | \
+  xargs gsan --timeout 1 --output sans.txt && \
+  sudo nmap -sS -F -vvv -iL sans.txt -oX import_to_metasploit.xml
+```
