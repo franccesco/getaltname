@@ -18,3 +18,7 @@ where = ["src"]
 
 [tool.black]
 line-length = 90
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
