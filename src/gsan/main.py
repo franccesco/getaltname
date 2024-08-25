@@ -158,7 +158,7 @@ def output_results(results, failed_domains, output_format, output_file):
 
 @app.command()
 def main(
-    domains: list[str] = typer.Argument(..., help="List of domains to check"),
+    domains: list[str] = typer.Argument(..., help="List of domains to check (e.g. 'example.com', '127.0.01:443')"),
     timeout: float = typer.Option(10.0, help="Connection timeout in seconds"),
     max_workers: int = typer.Option(10, help="Number of concurrent workers"),
     output_format: str = typer.Option("txt", "--format", help="Output format: 'txt' or 'json'"),
