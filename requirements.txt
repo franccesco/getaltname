@@ -3,7 +3,7 @@ click==8.1.7
 cryptography==43.0.3
 markdown-it-py==3.0.0
 mdurl==0.1.2
-pyasn1==0.6.0
+pyasn1==0.6.1
 pycparser==2.22
 Pygments==2.18.0
 pyOpenSSL==24.2.1
