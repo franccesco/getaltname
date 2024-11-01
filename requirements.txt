@@ -1,4 +1,4 @@
-cffi==1.17.0
+cffi==1.17.1
 click==8.1.7
 cryptography==43.0.0
 markdown-it-py==3.0.0
