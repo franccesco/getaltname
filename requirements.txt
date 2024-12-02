@@ -9,5 +9,5 @@ Pygments==2.18.0
 pyOpenSSL==24.2.1
 rich==13.9.4
 shellingham==1.5.4
-typer==0.13.0
+typer==0.14.0
 typing_extensions==4.12.2
