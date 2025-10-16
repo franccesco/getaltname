@@ -5,10 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gsan"
 version = "5.0.0"
-dependencies = ["typer", "rich", "pyasn1", "cryptography", "pyOpenSSL"]
-
-[project.optional-dependencies]
-dev = ["black"]
+requires-python = ">=3.14"
+dependencies = [
+    "typer",
+    "rich",
+    "pyasn1",
+    "cryptography",
+    "pyOpenSSL",
+    "ruff>=0.14.0",
+    "pyright>=1.1.406",
+]
 
 [project.scripts]
 gsan = "gsan.main:app"
@@ -16,9 +22,38 @@ gsan = "gsan.main:app"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.black]
-line-length = 90
+[tool.ruff.lint]
+preview = true
+select = [
+  "E",    # pycodestyle — hard PEP 8 violations (indentation, spacing, etc.).
+  "W",    # pycodestyle warnings — softer style nits you still want fixed.
+  "F",    # pyflakes — real code errors: undefined names, unused vars & imports.
+  "I",    # isort — keep your import blocks deterministically sorted/grouped.
+  "B",    # bugbear — likely bugs and nasty edge-cases (mutable defaults, etc.).
+  "C4",   # comprehensions — suggest faster/cleaner list- & dict-comps.
+  "UP",   # pyupgrade — auto-rewrite code to the newest-supported Python syntax.
+  "C901", # mccabe — flag functions whose cyclomatic complexity balloons.
+  "SIM",  # simplify — call out over-engineered constructs; prefer the obvious one-liner.
+  "N",    # pep8-naming — enforce PEP 8 names for classes, funcs, vars, etc.
+  "RUF",  # Ruff-native extras — Ruff-only correctness/perf rules (a la "unicorn").
+  "DOC",  # pydoclint — Google/Numpy docstring section order & completeness.
+  "D",    # pydocstyle — PEP 257 docstring formatting conformance.
+  "ARG",  # unused-arguments — catch never-used *args/**kwargs/params.
+  "PERF", # perflint — flag obvious performance foot-guns (e.g., `list()` in loops).
+]
+ignore = ["D203", "D212", "D213"]
+
+[tool.ruff.lint.mccabe]
+# Maximum complexity allowed (default is 10)
+max-complexity = 10
+
+[tool.ruff.lint.pep8-naming]
+# pyasn1 requires componentType (mixedCase) as part of its API
+extend-ignore-names = ["componentType"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.pyright]
-venvPath = "."
-venv = ".venv"
+typeCheckingMode = "strict"
