@@ -28,8 +28,8 @@ uv run ruff check
 # Format code
 uv run ruff format
 
-# Type checking with Pyright (strict mode)
-uv run pyright
+# Type checking with BasedPyright (strict mode)
+uv run basedpyright
 ```
 
 ### Running the Tool
@@ -90,5 +90,5 @@ docker run --rm -i gsan example.com
 - The tool intentionally accepts unsigned certificates (this is a security reconnaissance tool)
 - Project uses `uv` for package management
 - Ruff is configured with extensive linting rules (pycodestyle, pyflakes, isort, bugbear, pyupgrade, etc.)
-- Pyright type checking is set to strict mode
+- BasedPyright type checking is set to strict mode
 - Python 3.14+ is required (specified in pyproject.toml)
