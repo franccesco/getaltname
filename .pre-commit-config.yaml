@@ -1,0 +1,28 @@
+# Pre-commit hooks configuration for GSAN
+# Run with: prek run --all-files
+# Install hooks: prek install
+
+repos:
+  # Ruff - Fast Python linter (replaces flake8, isort, pyupgrade, etc.)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.1
+    hooks:
+      # Linter
+      - id: ruff
+        name: ruff lint
+        args: [--fix]
+        types_or: [python, pyi]
+      # Formatter
+      - id: ruff-format
+        name: ruff format
+        types_or: [python, pyi]
+
+  # basedpyright - Static type checker (via uv tool)
+  - repo: local
+    hooks:
+      - id: basedpyright
+        name: basedpyright (strict type checking)
+        entry: basedpyright
+        language: system
+        types: [python]
+        pass_filenames: false

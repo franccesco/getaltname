@@ -12,8 +12,6 @@ dependencies = [
     "pyasn1",
     "cryptography",
     "pyOpenSSL",
-    "ruff>=0.14.0",
-    "pyright>=1.1.406",
 ]
 
 [project.scripts]
