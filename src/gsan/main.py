@@ -1,38 +1,15 @@
 import ssl
 import json
 import socket
-import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import typer
 from rich import print as rprint
 from rich.progress import track
-from OpenSSL import crypto
-from pyasn1.codec.der import decoder
-from pyasn1.type import univ, char, namedtype, tag
+from cryptography import x509
+from cryptography.x509.oid import ExtensionOID
 
 app = typer.Typer(add_completion=False)
-
-
-class GeneralName(univ.Choice):
-    componentType = namedtype.NamedTypes(
-        namedtype.NamedType(
-            "dNSName",
-            char.IA5String().subtype(
-                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
-            ),
-        ),
-        namedtype.NamedType(
-            "iPAddress",
-            univ.OctetString().subtype(
-                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
-            ),
-        ),
-    )
-
-
-class GeneralNames(univ.SequenceOf):
-    componentType = GeneralName()
 
 
 def allow_unsigned_certificate() -> ssl.SSLContext:
@@ -57,7 +34,7 @@ def clean_domains(domains: list) -> list:
 
 def get_certificate(
     hostname: str, port: int, timeout: float, context: ssl.SSLContext
-) -> crypto.X509:
+) -> x509.Certificate:
     """
     Retrieves the X.509 certificate from the specified hostname and port.
     """
@@ -65,35 +42,24 @@ def get_certificate(
         with socket.create_connection((hostname, port), timeout=timeout) as sock:
             with context.wrap_socket(sock, server_hostname=hostname) as ssl_sock:
                 cert = ssl_sock.getpeercert(binary_form=True)
-                x509 = crypto.load_certificate(crypto.FILETYPE_ASN1, cert)
-                return x509
+                return x509.load_der_x509_certificate(cert)
     except Exception as e:
         raise ValueError(f"SSL certificate retrieval failed for {hostname}: {str(e)}")
 
 
-def extract_subdomains(x509: crypto.X509) -> list:
+def extract_subdomains(cert: x509.Certificate) -> list:
     """
     Extracts subdomains and IP addresses from the certificate's subjectAltName extension.
     """
     try:
-        subdomains = []
-        for extension_id in range(x509.get_extension_count()):
-            ext = x509.get_extension(extension_id)
-            ext_name = ext.get_short_name().decode("utf-8")
-            if ext_name == "subjectAltName":
-                ext_data = ext.get_data()
-                decoded_dat = decoder.decode(ext_data, asn1Spec=GeneralNames())
-                for name in decoded_dat:
-                    if isinstance(name, GeneralNames):
-                        for entry in range(len(name)):
-                            component = name.getComponentByPosition(entry)
-                            if "dNSName" in component:
-                                subdomains.append(str(component.getComponent()))
-                            elif "iPAddress" in component:
-                                ip_address = str(
-                                    ipaddress.ip_address(component.getComponent())
-                                )
-                                subdomains.append(ip_address)
+        try:
+            san = cert.extensions.get_extension_for_oid(
+                ExtensionOID.SUBJECT_ALTERNATIVE_NAME
+            ).value
+        except x509.ExtensionNotFound:
+            return []
+        subdomains = list(san.get_values_for_type(x509.DNSName))
+        subdomains += [str(ip) for ip in san.get_values_for_type(x509.IPAddress)]
         return subdomains
     except Exception as e:
         raise ValueError(f"Error extracting subdomains from the certificate: {str(e)}")
@@ -104,8 +70,8 @@ def process_domain(domain: str, port: int, timeout: float, context: ssl.SSLConte
     Processes the domain by retrieving the certificate and extracting subdomains.
     """
     try:
-        x509 = get_certificate(domain, port, timeout, context)
-        subdomains = clean_domains(extract_subdomains(x509))
+        cert = get_certificate(domain, port, timeout, context)
+        subdomains = clean_domains(extract_subdomains(cert))
 
         # Skip if no subdomains are found
         if not subdomains:

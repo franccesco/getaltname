@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gsan"
 version = "5.0.0"
-dependencies = ["typer", "rich", "pyasn1", "cryptography", "pyOpenSSL"]
+dependencies = ["typer", "rich", "cryptography"]
 
 [project.optional-dependencies]
 dev = ["black"]
