@@ -1,6 +1,7 @@
 """CLI interface for GSAN."""
 
 from typing import Annotated
+from urllib.parse import urlsplit
 
 import typer
 
@@ -8,6 +9,39 @@ from gsan.output.formatter import output_results
 from gsan.processing.domain import process_domains
 
 app = typer.Typer(add_completion=False)
+
+DEFAULT_PORT = 443
+
+
+def parse_domain(domain: str) -> tuple[str, int]:
+    """Parse a ``host`` or ``host:port`` target into a ``(host, port)`` pair.
+
+    Uses :func:`urllib.parse.urlsplit`, so bracketed IPv6 literals such as
+    ``[2001:db8::1]:443`` and bare hostnames are handled without crashing on
+    the extra colons. When no port is given, :data:`DEFAULT_PORT` is used.
+
+    Args:
+        domain: A target of the form ``host`` or ``host:port``.
+
+    Returns:
+        A ``(host, port)`` tuple with the host string and integer port.
+
+    Raises:
+        ValueError: If the host is missing or the port is not a valid integer
+            in the range 0-65535.
+
+    """
+    split = urlsplit(f"//{domain}")
+    host = split.hostname
+    if not host:
+        msg = f"Could not parse a host from {domain!r}"
+        raise ValueError(msg)
+    try:
+        port = split.port
+    except ValueError:
+        msg = f"Invalid port in {domain!r}"
+        raise ValueError(msg) from None
+    return host, port if port is not None else DEFAULT_PORT
 
 
 @app.command()
@@ -35,16 +69,17 @@ def main(
         typer.Option("--output", help="File to write the results to"),
     ] = None,
 ) -> None:
-    """Check subdomains and IPs present in SSL certificates of specified domains."""
-    parsed_domains: list[tuple[str, int]] = []
-    for domain in domains:
-        if ":" in domain:
-            host, port_str = domain.split(":")
-            port = int(port_str)
-        else:
-            host = domain
-            port = 443  # default port
-        parsed_domains.append((host, port))
+    """Check subdomains and IPs present in SSL certificates of specified domains.
+
+    Raises:
+        typer.BadParameter: If a target cannot be parsed into a host and a
+            valid port.
+
+    """
+    try:
+        parsed_domains = [parse_domain(domain) for domain in domains]
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
 
     print_results = not output_file
     results, failed_domains = process_domains(
