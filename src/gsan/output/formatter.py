@@ -2,8 +2,6 @@
 
 import json
 
-from rich import print as rprint
-
 
 def output_results(
     results: dict[str, list[str]],
@@ -22,8 +20,18 @@ def output_results(
     """
     if output_format == "json":
         output_data = {"results": results, "failed_domains": failed_domains}
-        rprint(json.dumps(output_data, indent=2))
+        json_output = json.dumps(output_data, indent=2)
+        # Machine-readable output must bypass Rich: its console markup would
+        # strip bracketed substrings (e.g. a SAN like "[::1]") and its
+        # soft-wrapping could inject newlines into long lines -- either would
+        # corrupt the emitted JSON. Honour --output for JSON too (previously
+        # the file was never written for the json format).
+        if output_file:
+            with open(output_file, "w", encoding="utf-8") as f:
+                f.write(f"{json_output}\n")
+        else:
+            print(json_output)
     elif output_file:
-        with open(output_file, "w") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             for subdomains in results.values():
                 f.writelines(f"{subdomain}\n" for subdomain in subdomains)
