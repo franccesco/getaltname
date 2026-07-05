@@ -9,9 +9,11 @@ requires-python = ">=3.14"
 dependencies = [
     "typer",
     "rich",
-    "pyasn1",
-    "cryptography",
-    "pyOpenSSL",
+    # SAN parsing now uses cryptography.x509 directly (dream-2026-07-05.1),
+    # so pyOpenSSL and pyasn1 are no longer needed. The >=48.0.1 floor also
+    # picks up GHSA-537c-gmf6-5ccf (vulnerable OpenSSL statically linked into
+    # earlier cryptography wheels).
+    "cryptography>=48.0.1",
 ]
 
 [project.scripts]
@@ -44,10 +46,6 @@ ignore = ["D203", "D212", "D213"]
 [tool.ruff.lint.mccabe]
 # Maximum complexity allowed (default is 10)
 max-complexity = 10
-
-[tool.ruff.lint.pep8-naming]
-# pyasn1 requires componentType (mixedCase) as part of its API
-extend-ignore-names = ["componentType"]
 
 [tool.ruff.format]
 quote-style = "double"

@@ -1,11 +1,12 @@
 """Domain extraction and cleaning utilities."""
 
-import ipaddress
-
-from OpenSSL import crypto
-from pyasn1.codec.der import decoder
-
-from gsan.certificate.models import GeneralNames
+from cryptography import x509
+from cryptography.x509 import (
+    DNSName,
+    ExtensionNotFound,
+    IPAddress,
+    SubjectAlternativeName,
+)
 
 
 def clean_domains(domains: list[str]) -> list[str]:
@@ -24,11 +25,11 @@ def clean_domains(domains: list[str]) -> list[str]:
     return sorted(cleaned_domains)
 
 
-def extract_subdomains(x509: crypto.X509) -> list[str]:
+def extract_subdomains(certificate: x509.Certificate) -> list[str]:
     """Extract DNS names and IPs from certificate subjectAltName extension.
 
     Args:
-        x509: X.509 certificate to parse.
+        certificate: X.509 certificate to parse.
 
     Returns:
         List of domain names and IP addresses from the certificate.
@@ -38,31 +39,14 @@ def extract_subdomains(x509: crypto.X509) -> list[str]:
 
     """
     try:
-        subdomains: list[str] = []
-        for extension_id in range(x509.get_extension_count()):
-            ext = x509.get_extension(extension_id)
-            ext_name = ext.get_short_name().decode("utf-8")
-            if ext_name == "subjectAltName":
-                ext_data = ext.get_data()
-                decoded_dat = decoder.decode(ext_data, asn1Spec=GeneralNames())  # type: ignore[arg-type]
-                for name in decoded_dat:  # type: ignore[assignment]
-                    if isinstance(name, GeneralNames):
-                        for entry in range(len(name)):
-                            component = name.getComponentByPosition(entry)  # type: ignore[attr-defined]
-                            if "dNSName" in component:
-                                subdomains.append(str(component.getComponent()))  # type: ignore[attr-defined]
-                            elif "iPAddress" in component:
-                                # getComponent() is a pyasn1 OctetString; convert
-                                # to raw bytes so ip_address() sees the packed
-                                # form (4 or 16 bytes) instead of the wrapper
-                                # object, which it cannot parse.
-                                ip_address = str(
-                                    ipaddress.ip_address(
-                                        bytes(component.getComponent())  # type: ignore[attr-defined]
-                                    )
-                                )
-                                subdomains.append(ip_address)
-        return subdomains
+        san = certificate.extensions.get_extension_for_class(
+            SubjectAlternativeName
+        ).value
+    except ExtensionNotFound:
+        return []
     except Exception as e:
         msg = f"Error extracting subdomains from the certificate: {e!s}"
         raise ValueError(msg) from e
+    dns_names = san.get_values_for_type(DNSName)
+    ip_addresses = [str(ip) for ip in san.get_values_for_type(IPAddress)]
+    return [*dns_names, *ip_addresses]

@@ -3,7 +3,7 @@
 import socket
 import ssl
 
-from OpenSSL import crypto
+from cryptography import x509
 
 
 def allow_unsigned_certificate() -> ssl.SSLContext:
@@ -21,7 +21,7 @@ def allow_unsigned_certificate() -> ssl.SSLContext:
 
 def get_certificate(
     hostname: str, port: int, timeout: float, context: ssl.SSLContext
-) -> crypto.X509:
+) -> x509.Certificate:
     """Retrieve X.509 certificate from a hostname and port.
 
     Args:
@@ -46,8 +46,7 @@ def get_certificate(
             if cert is None:
                 msg = f"No certificate received from {hostname}"
                 raise ValueError(msg)
-            x509 = crypto.load_certificate(crypto.FILETYPE_ASN1, cert)
-            return x509
+            return x509.load_der_x509_certificate(cert)
     except Exception as e:
         msg = f"SSL certificate retrieval failed for {hostname}: {e!s}"
         raise ValueError(msg) from e
