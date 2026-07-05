@@ -6,11 +6,9 @@ WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY ./pyproject.toml /app
-COPY ./requirements.txt /app
 COPY ./src /app/src
 
-# Install any needed dependencies specified in pyproject.toml
-# If you have a requirements.txt, use that instead.
+# Install the package and its dependencies from pyproject.toml
 RUN pip install --upgrade pip
 RUN pip install .
 
