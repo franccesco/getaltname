@@ -15,13 +15,13 @@ def clean_domains(domains: list[str]) -> list[str]:
         domains: List of domain names to clean.
 
     Returns:
-        Deduplicated list of cleaned domain names.
+        Sorted, deduplicated list of cleaned domain names.
 
     """
     cleaned_domains = {
         domain.removeprefix("*.").removeprefix("www.") for domain in domains
     }
-    return list(cleaned_domains)
+    return sorted(cleaned_domains)
 
 
 def extract_subdomains(x509: crypto.X509) -> list[str]:
@@ -52,8 +52,14 @@ def extract_subdomains(x509: crypto.X509) -> list[str]:
                             if "dNSName" in component:
                                 subdomains.append(str(component.getComponent()))  # type: ignore[attr-defined]
                             elif "iPAddress" in component:
+                                # getComponent() is a pyasn1 OctetString; convert
+                                # to raw bytes so ip_address() sees the packed
+                                # form (4 or 16 bytes) instead of the wrapper
+                                # object, which it cannot parse.
                                 ip_address = str(
-                                    ipaddress.ip_address(component.getComponent())  # type: ignore[attr-defined]
+                                    ipaddress.ip_address(
+                                        bytes(component.getComponent())  # type: ignore[attr-defined]
+                                    )
                                 )
                                 subdomains.append(ip_address)
         return subdomains
