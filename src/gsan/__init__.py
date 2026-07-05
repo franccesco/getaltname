@@ -5,12 +5,7 @@ from SSL certificates by connecting directly to HTTPS servers. It's used for
 reconnaissance to discover subdomains and virtual servers.
 """
 
-from gsan.certificate import (
-    GeneralName,
-    GeneralNames,
-    allow_unsigned_certificate,
-    get_certificate,
-)
+from gsan.certificate import allow_unsigned_certificate, get_certificate
 from gsan.cli import app, main
 from gsan.output import output_results
 from gsan.processing import (
@@ -21,8 +16,6 @@ from gsan.processing import (
 )
 
 __all__ = [
-    "GeneralName",
-    "GeneralNames",
     "allow_unsigned_certificate",
     "app",
     "clean_domains",

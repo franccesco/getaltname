@@ -14,27 +14,25 @@ import pytest
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.x509.oid import NameOID
-from OpenSSL import crypto
 
 from gsan.certificate.retrieval import allow_unsigned_certificate
 from gsan.processing import domain as domain_module
 
 
-def _cert_with_sans(dns_names: list[str]) -> crypto.X509:
-    """Build a self-signed pyOpenSSL cert carrying ``dns_names`` as SANs.
+def _cert_with_sans(dns_names: list[str]) -> x509.Certificate:
+    """Build a self-signed cert carrying ``dns_names`` as SANs.
 
     Args:
         dns_names: DNS names to embed in the SubjectAlternativeName extension.
 
     Returns:
-        A loaded pyOpenSSL X.509 certificate.
+        A signed self-signed X.509 certificate.
 
     """
     key = ec.generate_private_key(ec.SECP256R1())
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "test.example.com")])
-    cert = (
+    return (
         x509.CertificateBuilder()
         .subject_name(name)
         .issuer_name(name)
@@ -48,12 +46,9 @@ def _cert_with_sans(dns_names: list[str]) -> crypto.X509:
         )
         .sign(key, hashes.SHA256())
     )
-    return crypto.load_certificate(
-        crypto.FILETYPE_ASN1, cert.public_bytes(Encoding.DER)
-    )
 
 
-def _returns_cert(cert: crypto.X509) -> Callable[..., crypto.X509]:
+def _returns_cert(cert: x509.Certificate) -> Callable[..., x509.Certificate]:
     """Build a typed stand-in for get_certificate that always returns ``cert``.
 
     Args:
@@ -64,7 +59,7 @@ def _returns_cert(cert: crypto.X509) -> Callable[..., crypto.X509]:
 
     """
 
-    def _stub(*_args: object, **_kwargs: object) -> crypto.X509:
+    def _stub(*_args: object, **_kwargs: object) -> x509.Certificate:
         return cert
 
     return _stub
