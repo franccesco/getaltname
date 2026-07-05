@@ -9,8 +9,16 @@ requires-python = ">=3.14"
 dependencies = [
     "typer",
     "rich",
-    "pyasn1",
-    "cryptography",
+    # Security floors (dream-2026-07-05.1): pyasn1>=0.6.3 fixes CVE-2026-23490
+    # and CVE-2026-30922 (decoder DoS, reachable via untrusted cert parsing);
+    # cryptography>=46.0.7 fixes CVE-2026-26007, PYSEC-2026-35, PYSEC-2026-36.
+    # cryptography is capped <47 so the transitively-resolved pyOpenSSL stays
+    # <26 and keeps the X509 extension API that extraction.py still relies on;
+    # lifting this cap is the job of the cryptography.x509 migration, not this
+    # patch PR. (GHSA-537c-gmf6-5ccf, needing cryptography>=48.0.1, is deferred
+    # to that migration.)
+    "pyasn1>=0.6.3",
+    "cryptography>=46.0.7,<47",
     "pyOpenSSL",
 ]
 
@@ -55,3 +63,8 @@ indent-style = "space"
 
 [tool.pyright]
 typeCheckingMode = "strict"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
