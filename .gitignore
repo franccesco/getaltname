@@ -252,3 +252,7 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/sublimetext,macos,python,venv
+
+# Claude Code / dream: local state and transient worktrees
+.claude/dream/
+.claude/worktrees/
