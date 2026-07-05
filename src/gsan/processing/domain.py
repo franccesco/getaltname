@@ -4,6 +4,7 @@ import ssl
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from rich import print as rprint
+from rich.markup import escape
 from rich.progress import track
 
 from gsan.certificate.retrieval import allow_unsigned_certificate, get_certificate
@@ -41,9 +42,12 @@ def process_domain(
             return None
 
         if print_results:
-            rprint(f"\n[bold green]{domain}[/bold green] [{len(subdomains)}]:")
+            # Escape cert-derived values: a SAN containing "[...]" would
+            # otherwise be parsed as Rich console markup and silently dropped
+            # (or raise MarkupError on malformed tags like "[/]").
+            rprint(f"\n[bold green]{escape(domain)}[/bold green] [{len(subdomains)}]:")
             for subdomain in subdomains:
-                rprint(f"- {subdomain}")
+                rprint(f"- {escape(subdomain)}")
 
         return domain, subdomains, None
     except Exception as e:
