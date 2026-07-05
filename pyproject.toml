@@ -55,3 +55,8 @@ indent-style = "space"
 
 [tool.pyright]
 typeCheckingMode = "strict"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
